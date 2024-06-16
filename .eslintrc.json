@@ -1,0 +1,25 @@
+{
+    "extends": ["react-app", "plugin:prettier/recommended"],
+    "plugins": ["unused-imports", "prettier"],
+    "rules": {
+        // "no-unused-vars": "off",
+        "unused-imports/no-unused-imports": "error",
+
+        "sort-imports": [
+            "error",
+            {
+                "ignoreDeclarationSort": true
+            }
+        ],
+        "no-unused-vars": [
+            "warn",
+            {
+                "vars": "all",
+                "varsIgnorePattern": "^_",
+                "args": "after-used",
+                "argsIgnorePattern": "^_"
+            }
+        ],
+        "prettier/prettier": "error"
+    }
+}
