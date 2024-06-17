@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { Button, TextField } from '@mui/material';
+import EditableTextField from 'component/textfield/EditableTextField';
 import React, { FC, useEffect, useState } from 'react';
 
 interface ModalProps {
@@ -96,6 +97,8 @@ const Modal: FC<ModalProps> = ({ show, onClose, title, data, onUpdate }) => {
                     <Button type="submit" variant="contained" color="primary">
                         Submit
                     </Button>
+
+                    <EditableTextField />
                 </form>
             </div>
         </>
