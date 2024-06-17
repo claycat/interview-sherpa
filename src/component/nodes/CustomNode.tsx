@@ -15,7 +15,7 @@ interface CustomNodeData {
 
 const customNodeStyle = css`
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 15px;
     background: #fff;
     position: relative;
     font-size: 0.5em;

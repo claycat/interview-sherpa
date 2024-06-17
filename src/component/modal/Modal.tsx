@@ -1,17 +1,18 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import React, { FC } from 'react';
+import { Button, TextField } from '@mui/material';
+import React, { FC, useEffect, useState } from 'react';
 
 interface ModalProps {
     show: boolean;
     onClose: () => void;
     title: string;
-    children: React.ReactNode;
+    data: { label: string; question: string; answer: string };
+    onUpdate: (newData: { label: string; question: string; answer: string }) => void;
 }
 
 const modalStyle = css`
     position: fixed;
-    border-radius: 5px;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
@@ -44,7 +45,25 @@ const closeButtonStyle = css`
     cursor: pointer;
 `;
 
-const Modal: FC<ModalProps> = ({ show, onClose, title, children }) => {
+const formStyle = css`
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+`;
+
+const Modal: FC<ModalProps> = ({ show, onClose, title, data, onUpdate }) => {
+    const [formData, setFormData] = useState(data);
+
+    useEffect(() => {
+        setFormData(data);
+    }, [data]);
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        onUpdate(formData);
+        onClose();
+    };
+
     if (!show) return null;
 
     return (
@@ -55,7 +74,29 @@ const Modal: FC<ModalProps> = ({ show, onClose, title, children }) => {
                     ×
                 </button>
                 <h2>{title}</h2>
-                <div>{children}</div>
+                <form css={formStyle} onSubmit={handleSubmit}>
+                    <TextField
+                        label="Node Label"
+                        value={formData.label}
+                        onChange={e => setFormData({ ...formData, label: e.target.value })}
+                        fullWidth
+                    />
+                    <TextField
+                        label="Question"
+                        value={formData.question}
+                        onChange={e => setFormData({ ...formData, question: e.target.value })}
+                        fullWidth
+                    />
+                    <TextField
+                        label="Answer"
+                        value={formData.answer}
+                        onChange={e => setFormData({ ...formData, answer: e.target.value })}
+                        fullWidth
+                    />
+                    <Button type="submit" variant="contained" color="primary">
+                        Submit
+                    </Button>
+                </form>
             </div>
         </>
     );
