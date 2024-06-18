@@ -1,8 +1,9 @@
 import { useCallback } from 'react';
 import { Edge, Node, Position, useEdgesState, useNodesState } from 'reactflow';
+import { NodeContent } from 'type/NodeContent';
 
-const useNode = (initialNodes: Node[], initialEdges: Edge[]) => {
-    const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+const useNode = (initialNodes: Node<NodeContent>[], initialEdges: Edge[]) => {
+    const [nodes, setNodes, onNodesChange] = useNodesState<NodeContent>(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
     const addNode = useCallback(
@@ -24,10 +25,16 @@ const useNode = (initialNodes: Node[], initialEdges: Edge[]) => {
                     y: parentNode.position.y,
                 };
 
-                const newNode: Node = {
+                const newNodeContent: NodeContent = {
+                    label: `Node ${newNodeId}`,
+                    question: '',
+                    answer: [],
+                };
+
+                const newNode: Node<NodeContent> = {
                     id: newNodeId,
                     type: 'customNode',
-                    data: { label: `Node ${newNodeId}`, question: '', answer: '' },
+                    data: newNodeContent,
                     position: newPosition,
                 };
 
@@ -50,7 +57,7 @@ const useNode = (initialNodes: Node[], initialEdges: Edge[]) => {
     );
 
     const updateNodeData = useCallback(
-        (nodeId: string, newData: Partial<Node['data']>) => {
+        (nodeId: string, newData: Partial<NodeContent>) => {
             setNodes(nds =>
                 nds.map(node =>
                     node.id === nodeId ? { ...node, data: { ...node.data, ...newData } } : node,

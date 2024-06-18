@@ -1,11 +1,13 @@
 import styled from '@emotion/styled';
 import CheckIcon from '@mui/icons-material/Check';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
-import React, { ChangeEvent, useRef, useState } from 'react';
+import { ChangeEvent, FC, useRef, useState } from 'react';
 
 const StyledTextField = styled(TextField)`
+    flex-grow: 1;
     .MuiInputAdornment-positionEnd {
         position: absolute;
         bottom: 20px;
@@ -18,9 +20,14 @@ const StyledTextField = styled(TextField)`
     }
 `;
 
-const EditableTextField: React.FC = () => {
+interface TextFieldProps {
+    text: string;
+    setText: (text: string) => void;
+    handleDelete?: () => void;
+}
+
+const EditableTextField: FC<TextFieldProps> = ({ text, setText, handleDelete }) => {
     const [isEditing, setIsEditing] = useState<boolean>(false);
-    const [text, setText] = useState<string>('안녕하세요.에 대한 질문');
     const textFieldRef = useRef<HTMLInputElement | null>(null);
 
     const handleEditClick = () => {
@@ -54,7 +61,6 @@ const EditableTextField: React.FC = () => {
             variant="outlined"
             multiline
             sx={{
-                paddingRight: '64px',
                 color: isEditing ? 'inherit' : 'black',
                 '& .MuiInputBase-input.Mui-disabled': {
                     WebkitTextFillColor: 'black',
@@ -71,6 +77,9 @@ const EditableTextField: React.FC = () => {
                         </IconButton>
                         <IconButton onClick={handleCopyClick}>
                             <ContentCopyIcon />
+                        </IconButton>
+                        <IconButton onClick={handleDelete}>
+                            <DeleteIcon />
                         </IconButton>
                     </InputAdornment>
                 ),

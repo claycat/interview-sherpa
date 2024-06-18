@@ -1,5 +1,5 @@
 export type NodeContent = {
     label: string;
     question: string;
-    answer: string;
+    answer: string[];
 };

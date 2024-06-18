@@ -6,12 +6,13 @@ import ReactFlow, { BackgroundVariant, Edge, Node, Position, ReactFlowProvider }
 
 import { Background, Controls, MiniMap } from 'reactflow';
 import 'reactflow/dist/style.css';
+import { NodeContent } from 'type/NodeContent';
 
-const initialNodes: Node[] = [
+const initialNodes: Node<NodeContent>[] = [
     {
         id: 'node-1',
         type: 'customNode',
-        data: { label: 'Node 1', question: 'what', answer: 'answer' },
+        data: { label: 'Node 1', question: 'what', answer: ['answer'] },
         position: { x: 250, y: 5 },
     },
 ];
@@ -37,7 +38,6 @@ const TopicPage = () => {
                 open ? handleShowModal(node.id) : handleCloseModal(),
         },
     }));
-
     const currentNode = nodes.find(node => node.id === modalNodeId);
 
     return (
@@ -61,7 +61,6 @@ const TopicPage = () => {
                     <Modal
                         show={isModalOpen}
                         onClose={handleCloseModal}
-                        title={`Edit Node ${currentNode.id}`}
                         data={currentNode.data}
                         onUpdate={newData => updateNodeData(currentNode.id, newData)}
                     />

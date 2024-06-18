@@ -6,8 +6,8 @@ import { TiDeleteOutline } from 'react-icons/ti';
 import { Handle, NodeProps, NodeResizer, Position } from 'reactflow';
 
 import { FiEdit } from 'react-icons/fi';
-interface CustomNodeData {
-    label: string;
+import { NodeContent } from 'type/NodeContent';
+interface CustomNodeData extends NodeContent {
     onAddNode: (position: Position) => void;
     setIsModalOpen: (open: boolean) => void;
     isModalOpen: boolean;
@@ -15,7 +15,7 @@ interface CustomNodeData {
 
 const customNodeStyle = css`
     border: 1px solid #ddd;
-    border-radius: 15px;
+    border-radius: 5px;
     background: #fff;
     position: relative;
     font-size: 0.5em;
@@ -23,6 +23,8 @@ const customNodeStyle = css`
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    min-width: 80px; /* Set minimum width */
+    min-height: 40px;
 `;
 
 const iconsContainerStyle = css`
@@ -43,11 +45,26 @@ const iconStyle = css`
     font-size: 1.2em;
 `;
 
+const labelStyle = css`
+    padding: 10px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+    width: 100%;
+    text-align: center;
+`;
 const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data, selected }) => {
     const [hover, setHover] = useState(false);
 
+    const handleDoubleClick = () => {
+        data.setIsModalOpen(true);
+    };
+
     return (
         <div
+            onDoubleClick={() => handleDoubleClick()}
             css={customNodeStyle}
             style={{ width: '100%', height: '100%' }}
             onMouseEnter={() => setHover(true)}
@@ -68,7 +85,7 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data, selected }) => {
                 }}
                 style={{ cursor: 'pointer' }}
             />
-            <div style={{ padding: 10 }}>{data.label}</div>
+            <div css={labelStyle}>{data.question}</div>
             <Handle
                 type="source"
                 position={Position.Right}

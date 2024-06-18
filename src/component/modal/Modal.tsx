@@ -1,15 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-import { Button, TextField } from '@mui/material';
+import { Button } from '@mui/material';
 import EditableTextField from 'component/textfield/EditableTextField';
 import React, { FC, useEffect, useState } from 'react';
+import { NodeContent } from 'type/NodeContent';
+import AnswersList from './AnswerList';
 
 interface ModalProps {
     show: boolean;
     onClose: () => void;
-    title: string;
-    data: { label: string; question: string; answer: string };
-    onUpdate: (newData: { label: string; question: string; answer: string }) => void;
+    data: NodeContent;
+    onUpdate: (newData: NodeContent) => void;
 }
 
 const modalStyle = css`
@@ -17,8 +18,8 @@ const modalStyle = css`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 50vw;
-    height: 50vh;
+    width: 70vw;
+    height: 70vh;
     background: white;
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -42,7 +43,7 @@ const closeButtonStyle = css`
     right: 10px;
     background: none;
     border: none;
-    font-size: 16px;
+    font-size: 32px;
     cursor: pointer;
 `;
 
@@ -52,16 +53,24 @@ const formStyle = css`
     gap: 10px;
 `;
 
-const Modal: FC<ModalProps> = ({ show, onClose, title, data, onUpdate }) => {
-    const [formData, setFormData] = useState(data);
+const titleStyle = css`
+    text-align: center;
+`;
+
+const Modal: FC<ModalProps> = ({ show, onClose, data, onUpdate }) => {
+    const [label, setLabel] = useState(data.label);
+    const [question, setQuestion] = useState(data.question);
+    const [answers, setAnswers] = useState<string[]>(data.answer);
 
     useEffect(() => {
-        setFormData(data);
+        setLabel(data.label);
+        setQuestion(data.question);
+        setAnswers(data.answer);
     }, [data]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onUpdate(formData);
+        onUpdate({ label, question, answer: answers });
         onClose();
     };
 
@@ -74,31 +83,15 @@ const Modal: FC<ModalProps> = ({ show, onClose, title, data, onUpdate }) => {
                 <button css={closeButtonStyle} onClick={onClose}>
                     ×
                 </button>
-                <h2>{title}</h2>
                 <form css={formStyle} onSubmit={handleSubmit}>
-                    <TextField
-                        label="Node Label"
-                        value={formData.label}
-                        onChange={e => setFormData({ ...formData, label: e.target.value })}
-                        fullWidth
-                    />
-                    <TextField
-                        label="Question"
-                        value={formData.question}
-                        onChange={e => setFormData({ ...formData, question: e.target.value })}
-                        fullWidth
-                    />
-                    <TextField
-                        label="Answer"
-                        value={formData.answer}
-                        onChange={e => setFormData({ ...formData, answer: e.target.value })}
-                        fullWidth
-                    />
+                    <h2 css={titleStyle}>Question</h2>
+                    <EditableTextField text={question} setText={setQuestion} />
+
+                    <h2 css={titleStyle}>Answers</h2>
+                    <AnswersList answers={answers} setAnswers={setAnswers} />
                     <Button type="submit" variant="contained" color="primary">
                         Submit
                     </Button>
-
-                    <EditableTextField />
                 </form>
             </div>
         </>
