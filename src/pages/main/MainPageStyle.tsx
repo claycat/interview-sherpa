@@ -28,25 +28,26 @@ export const MainContainerLeft = styled.div`
     background-size: cover;
     background-position: center;
     opacity: 0;
-    padding-bottom: 100px;
+    padding-bottom: 200px;
     animation: ${fadeIn} 1s ease-in forwards;
 `;
 
 export const MainContainerRight = styled.div`
-    width: 700px;
+    width: 40vw;
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: center;
+    text-align: center;
     position: relative;
 `;
 
 export const MainPageMainHeader = styled.div`
-    font-size: 40px;
+    font-size: 4em;
     color: white;
 `;
 
 export const MainPageSubHeader = styled.div`
-    font-size: 24px;
+    font-size: 3em;
     color: white;
 `;

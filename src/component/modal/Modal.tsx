@@ -18,8 +18,20 @@ const modalStyle = css`
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 70vw;
     height: 70vh;
+    width: calc(30vw + 200px);
+
+    @media (max-width: 1200px) {
+        width: calc(40vw + 200px);
+    }
+
+    @media (max-width: 800px) {
+        width: calc(50vw + 100px);
+    }
+
+    @media (max-width: 600px) {
+        width: 70vw;
+    }
     background: white;
     padding: 20px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);

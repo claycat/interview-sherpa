@@ -15,6 +15,10 @@ const MainPage = () => {
                 <MainPageSubHeader>Guide to your interview journey</MainPageSubHeader>
             </MainContainerLeft>
             <MainContainerRight>
+                <h1 style={{ marginBottom: '40px', fontWeight: '600' }}>
+                    Start your Interview Preperation
+                </h1>
+
                 <SocialLoginButtons />
             </MainContainerRight>
         </SplitScreenContainer>

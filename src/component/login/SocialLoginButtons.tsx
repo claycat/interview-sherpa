@@ -3,7 +3,7 @@
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { Button } from '@mui/material';
+import { Button, Divider } from '@mui/material';
 import GoogleIcon from 'assets/icons/GoogleIcon';
 
 const Container = styled.div`
@@ -11,22 +11,23 @@ const Container = styled.div`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    width: 50%;
 `;
 
 const LoginContainer = styled.div`
     background: white;
-    padding: 20px;
+    padding: 30px;
+    padding-bottom: 60px;
     border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    width: 400px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    width: 100%;
     text-align: center;
 `;
 
 const googleButtonStyle = css`
     border: none; /* No border */
     color: rgba(0, 0, 0, 0.54);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     &:hover {
         background-color: rgba(0, 0, 0, 0);
         color: rgba(0, 0, 0, 0.87);
@@ -50,6 +51,7 @@ const buttonStyle = css`
 
 const LoginHeader = styled.h2`
     font-size: 24px;
+    font-weight: 300;
     margin-bottom: 20px;
 `;
 
@@ -57,7 +59,8 @@ const SocialLoginButtons: React.FC = () => {
     return (
         <Container>
             <LoginContainer>
-                <LoginHeader>Login</LoginHeader>
+                <LoginHeader>Sign In / Register</LoginHeader>
+                <Divider style={{ marginBottom: '30px' }} />
                 <Button
                     variant="outlined"
                     startIcon={<GoogleIcon />}
