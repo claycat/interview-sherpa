@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { Edge, Node, Position, useEdgesState, useNodesState } from 'reactflow';
 import { NodeContent } from 'type/NodeContent';
 
-const useNode = (initialNodes: Node<NodeContent>[], initialEdges: Edge[]) => {
+const useFlow = (initialNodes: Node<NodeContent>[], initialEdges: Edge[]) => {
     const [nodes, setNodes, onNodesChange] = useNodesState<NodeContent>(initialNodes);
     const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
 
@@ -28,7 +28,7 @@ const useNode = (initialNodes: Node<NodeContent>[], initialEdges: Edge[]) => {
                 const newNodeContent: NodeContent = {
                     label: `Node ${newNodeId}`,
                     question: '',
-                    answer: [],
+                    answers: [],
                 };
 
                 const newNode: Node<NodeContent> = {
@@ -71,6 +71,7 @@ const useNode = (initialNodes: Node<NodeContent>[], initialEdges: Edge[]) => {
         nodes,
         edges,
         setNodes,
+        setEdges,
         onNodesChange,
         onEdgesChange,
         addNode,
@@ -78,4 +79,4 @@ const useNode = (initialNodes: Node<NodeContent>[], initialEdges: Edge[]) => {
     };
 };
 
-export default useNode;
+export default useFlow;

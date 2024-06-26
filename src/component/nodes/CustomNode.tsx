@@ -23,7 +23,7 @@ const customNodeStyle = css`
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-width: 80px; /* Set minimum width */
+    min-width: 80px;
     min-height: 40px;
 `;
 
@@ -46,7 +46,6 @@ const iconStyle = css`
 `;
 
 const labelStyle = css`
-    padding: 10px;
     overflow: hidden;
     display: -webkit-box;
     -webkit-line-clamp: 3;

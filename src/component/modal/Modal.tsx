@@ -72,17 +72,17 @@ const titleStyle = css`
 const Modal: FC<ModalProps> = ({ show, onClose, data, onUpdate }) => {
     const [label, setLabel] = useState(data.label);
     const [question, setQuestion] = useState(data.question);
-    const [answers, setAnswers] = useState<string[]>(data.answer);
+    const [answers, setAnswers] = useState<string[]>(data.answers);
 
     useEffect(() => {
         setLabel(data.label);
         setQuestion(data.question);
-        setAnswers(data.answer);
+        setAnswers(data.answers);
     }, [data]);
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onUpdate({ label, question, answer: answers });
+        onUpdate({ label, question, answers: answers });
         onClose();
     };
 
