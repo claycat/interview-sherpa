@@ -2,7 +2,7 @@ import Flow from 'component/flow/Flow';
 import Modal from 'component/modal/Modal';
 import useModal from 'component/modal/hooks/useModal';
 import CustomNode from 'component/nodes/CustomNode';
-import useNode from 'component/nodes/hooks/useNode';
+import useFlow from 'component/nodes/hooks/useFlow';
 import { Edge, Node, Position, ReactFlowProvider } from 'reactflow';
 
 import 'reactflow/dist/style.css';
@@ -33,7 +33,7 @@ const TopicPage = () => {
         onEdgesChange,
         addNode,
         updateNodeData,
-    } = useNode(initialNodes, initialEdges);
+    } = useFlow(initialNodes, initialEdges);
 
     const { isModalOpen, modalNodeId, handleShowModal, handleCloseModal } = useModal();
 
@@ -52,7 +52,7 @@ const TopicPage = () => {
         <div style={{ width: '100vw', height: '100vh' }}>
             <ReactFlowProvider>
                 <Flow
-                    nodes={nodes}
+                    nodes={updatedNodes}
                     edges={edges}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}

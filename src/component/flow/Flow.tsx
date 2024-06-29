@@ -5,28 +5,35 @@ import ReactFlow, {
     BackgroundVariant,
     Controls,
     MiniMap,
+    NodeChange,
     useReactFlow,
 } from 'reactflow';
-import { WebSocketMessage } from 'type/WebSocketMessage';
+import { serverWebSocketMessageDispatcher } from 'websocket/WebSocketMessageDispatcher';
+
 type ReactFlowProps = ComponentProps<typeof ReactFlow>;
 
 const Flow: React.FC<ReactFlowProps> = props => {
     const rf = useReactFlow();
 
     const onMessage = (message: string) => {
-        const webSocketMessage: WebSocketMessage = JSON.parse(message);
-        const { edges, nodes, viewport } = webSocketMessage.data;
-
-        rf.setViewport(viewport);
-        rf.setEdges(edges);
-        rf.setNodes(nodes);
-
-        console.log(webSocketMessage);
+        serverWebSocketMessageDispatcher(message, rf, sendMessage);
     };
+
+    const h = (change: NodeChange[]) => {
+        //console.log(change);
+        if (props.onNodesChange) {
+            props.onNodesChange(change);
+            // const webSocketMessage = new WebSocketMessage('CLIENT_CONNECT', {
+            //     flow: flowToJson(rf),
+            // });
+            // sendMessage(webSocketMessage);
+        }
+    };
+
     const { isConnected, sendMessage } = useWebSocket('ws://localhost:8080/ws/nodes', onMessage);
 
     return (
-        <ReactFlow {...props}>
+        <ReactFlow {...props} onNodesChange={h}>
             <Controls />
             <MiniMap />
             <Background variant={'dots' as BackgroundVariant} gap={12} size={1} />
