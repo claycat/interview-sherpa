@@ -1,6 +1,6 @@
 import { keyframes } from '@emotion/react';
 import styled from '@emotion/styled';
-import loginBg from '../../assets/image/mainpage.jpg';
+import loginBg from '../../assets/image/welcomepage.jpg';
 const fadeIn = keyframes`
   from {
     opacity: 0;
@@ -42,12 +42,12 @@ export const MainContainerRight = styled.div`
     position: relative;
 `;
 
-export const MainPageMainHeader = styled.div`
+export const WelcomePageMainHeader = styled.div`
     font-size: 4em;
     color: white;
 `;
 
-export const MainPageSubHeader = styled.div`
+export const WelcomePageSubHeader = styled.div`
     font-size: 3em;
     color: white;
 `;
