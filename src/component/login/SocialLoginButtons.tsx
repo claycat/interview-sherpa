@@ -5,6 +5,7 @@ import styled from '@emotion/styled';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { Button, Divider } from '@mui/material';
 import GoogleIcon from 'assets/icons/GoogleIcon';
+import { handleOAuthGoogle } from './loginHandler';
 
 const Container = styled.div`
     display: flex;
@@ -50,7 +51,7 @@ const buttonStyle = css`
 `;
 
 const LoginHeader = styled.h2`
-    font-size: 24px;
+    font-size: 2vw;
     font-weight: 300;
     margin-bottom: 20px;
 `;
@@ -64,7 +65,9 @@ const SocialLoginButtons: React.FC = () => {
                 <Button
                     variant="outlined"
                     startIcon={<GoogleIcon />}
+                    style={{ fontSize: '1.3vw' }}
                     css={[buttonStyle, googleButtonStyle]}
+                    onClick={() => handleOAuthGoogle()}
                 >
                     Continue with Google
                 </Button>
@@ -72,7 +75,7 @@ const SocialLoginButtons: React.FC = () => {
                     variant="contained"
                     startIcon={<GitHubIcon />}
                     css={buttonStyle}
-                    style={{ backgroundColor: '#000000', color: 'white' }}
+                    style={{ backgroundColor: '#000000', color: 'white', fontSize: '1.3vw' }}
                 >
                     Continue with Github
                 </Button>

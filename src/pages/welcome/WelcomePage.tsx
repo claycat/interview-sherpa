@@ -15,7 +15,7 @@ const WelcomePage = () => {
                 <WelcomePageSubHeader>Guide to your interview journey</WelcomePageSubHeader>
             </MainContainerLeft>
             <MainContainerRight>
-                <h1 style={{ marginBottom: '40px', fontWeight: '600' }}>
+                <h1 style={{ marginBottom: '40px', fontWeight: '600', fontSize: '2vw' }}>
                     Start your Interview Preperation
                 </h1>
 

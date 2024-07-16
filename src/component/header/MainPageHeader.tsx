@@ -42,7 +42,14 @@ const Header = () => {
             <StyledToolbar>
                 <LogoSection>
                     <img src={claycat} alt="Interview Sherpa" style={{ width: 32, height: 32 }} />
-                    <span style={{ marginLeft: '8px', fontWeight: 'bold', color: 'black' }}>
+                    <span
+                        style={{
+                            marginLeft: '8px',
+                            fontWeight: 'bold',
+                            color: 'black',
+                            fontSize: '1vw',
+                        }}
+                    >
                         Interview Sherpa
                     </span>
                 </LogoSection>

@@ -5,7 +5,7 @@ export const MainTextSectionContainer = styled('div')({
     alignItems: 'center',
     justifyContent: 'center',
     height: '20vh',
-    fontSize: '2.5em',
+    fontSize: '4vw',
     color: '#29C5CF',
     fontWeight: '600',
     fontFamily: 'Inter',

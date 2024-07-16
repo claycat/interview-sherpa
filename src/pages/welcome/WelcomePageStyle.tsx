@@ -43,11 +43,11 @@ export const MainContainerRight = styled.div`
 `;
 
 export const WelcomePageMainHeader = styled.div`
-    font-size: 4em;
+    font-size: 3vw;
     color: white;
 `;
 
 export const WelcomePageSubHeader = styled.div`
-    font-size: 3em;
+    font-size: 2.5vw;
     color: white;
 `;
