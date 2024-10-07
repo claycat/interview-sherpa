@@ -1,4 +1,4 @@
-import useFlowWebSocket from 'hook/useFlowWebSocket';
+import { useWebSocket } from 'hook/websocket/WebSocketContext';
 import { ComponentProps, useCallback } from 'react';
 import ReactFlow, {
     Background,
@@ -10,16 +10,11 @@ import ReactFlow, {
 } from 'reactflow';
 import { flowToJson } from 'util/flowToJson';
 import { clientSendFlowHandler } from 'websocket/handler/client/clientSendFlowHandler';
-import { serverWebSocketMessageDispatcher } from 'websocket/WebSocketMessageDispatcher';
 
 type ReactFlowProps = ComponentProps<typeof ReactFlow>;
 
 const Flow: React.FC<ReactFlowProps> = props => {
     const rf = useReactFlow();
-
-    const onMessage = (message: string) => {
-        serverWebSocketMessageDispatcher(message, rf, sendMessage);
-    };
 
     const h = (change: NodeChange[]) => {
         if (props.onNodesChange) {
@@ -27,7 +22,7 @@ const Flow: React.FC<ReactFlowProps> = props => {
         }
     };
 
-    const { isConnected, sendMessage } = useFlowWebSocket('ws://localhost:8888/ws', onMessage);
+    const { isConnected, sendMessage } = useWebSocket();
 
     const handleSave = useCallback(() => {
         console.log('handle save');

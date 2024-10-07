@@ -1,26 +1,28 @@
 import { Client, IMessage, IPublishParams } from '@stomp/stompjs';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { clientConnectHandler } from 'websocket/handler/client/clientConnectHandler';
 import { WebSocketMessage } from 'websocket/message/WebSocketMessage';
 
-const useFlowWebSocket = (brokerURL: string, onMessage: (message: string) => void) => {
+interface Subscription {
+    topic: string;
+    callback: (message: string) => void;
+}
+
+const useFlowWebSocket = (brokerURL: string) => {
     const [isConnected, setIsConnected] = useState(false);
-    const webSocket = useRef<WebSocket | null>(null);
-
     const client = useRef<Client | null>(null);
-
-    const stableOnMessage = useCallback(onMessage, []);
+    const subscriptions = useRef<Subscription[]>([]);
 
     useEffect(() => {
         client.current = new Client({
             brokerURL,
+            reconnectDelay: 5000,
             onConnect: () => {
                 console.log('STOMP connected');
                 setIsConnected(true);
-                clientConnectHandler(sendMessage);
-
-                client.current?.subscribe('/topic/flow', (message: IMessage) => {
-                    stableOnMessage(message.body);
+                subscriptions.current.forEach(sub => {
+                    client.current?.subscribe(sub.topic, (message: IMessage) => {
+                        sub.callback(message.body);
+                    });
                 });
             },
             onDisconnect: () => {
@@ -33,18 +35,38 @@ const useFlowWebSocket = (brokerURL: string, onMessage: (message: string) => voi
             },
         });
 
-        client.current.onUnhandledMessage = (message: IMessage) => {
-            stableOnMessage(message.body);
-        };
-
         client.current.activate();
 
         return () => {
-            if (client.current) {
-                client.current.deactivate();
-            }
+            client.current?.deactivate();
         };
-    }, [brokerURL, stableOnMessage]);
+    }, [brokerURL]);
+
+    const subscribe = useCallback(
+        (topic: string, callback: (message: string) => void) => {
+            if (isConnected && client.current) {
+                const subscription = client.current.subscribe(topic, (message: IMessage) => {
+                    callback(message.body);
+                });
+                subscriptions.current.push({ topic, callback });
+                return () => {
+                    subscription.unsubscribe();
+                    subscriptions.current = subscriptions.current.filter(
+                        sub => sub.topic !== topic,
+                    );
+                };
+            } else {
+                // If not connected yet, store the subscription to be subscribed on connect
+                subscriptions.current.push({ topic, callback });
+                return () => {
+                    subscriptions.current = subscriptions.current.filter(
+                        sub => sub.topic !== topic,
+                    );
+                };
+            }
+        },
+        [isConnected],
+    );
 
     const sendMessage = useCallback((destination: string, message: WebSocketMessage) => {
         if (client.current && client.current.connected) {
@@ -52,13 +74,14 @@ const useFlowWebSocket = (brokerURL: string, onMessage: (message: string) => voi
                 destination: destination,
                 body: JSON.stringify(message),
             };
-            console.log(payload);
-
+            console.log('Sending payload:', payload);
             client.current.publish(payload);
+        } else {
+            console.warn('Cannot send message, STOMP client is not connected');
         }
     }, []);
 
-    return { isConnected, sendMessage };
+    return { isConnected, subscribe, sendMessage };
 };
 
 export default useFlowWebSocket;

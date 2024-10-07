@@ -3,6 +3,7 @@ import Modal from 'component/modal/Modal';
 import useModal from 'component/modal/hooks/useModal';
 import CustomNode from 'component/nodes/CustomNode';
 import useFlow from 'component/nodes/hooks/useFlow';
+import { useWebSocket } from 'hook/websocket/WebSocketContext';
 import { Edge, Node, Position, ReactFlowProvider } from 'reactflow';
 
 import 'reactflow/dist/style.css';
@@ -36,6 +37,8 @@ const TopicPage = () => {
     } = useFlow(initialNodes, initialEdges);
 
     const { isModalOpen, modalNodeId, handleShowModal, handleCloseModal } = useModal();
+
+    const { isConnected, subscribe, sendMessage } = useWebSocket();
 
     const updatedNodes = nodes.map(node => ({
         ...node,

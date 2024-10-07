@@ -1,9 +1,9 @@
-import { ClientWebSocketMessage } from 'websocket/message/ClientWebSocketMessage';
+import { ClientConnect } from 'websocket/message/ClientConnect';
 import { WebSocketMessage } from 'websocket/message/WebSocketMessage';
 
 export const clientConnectHandler = (
     sendMessage: (destination: string, message: WebSocketMessage) => void,
 ) => {
-    const message = new ClientWebSocketMessage('CLIENT_CONNECT_REQUEST', null);
+    const message = new ClientConnect();
     sendMessage('/app/flow/request', message);
 };
