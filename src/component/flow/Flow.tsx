@@ -1,5 +1,5 @@
-import useWebSocket from 'hook/useWebSocket';
-import { ComponentProps } from 'react';
+import useFlowWebSocket from 'hook/useFlowWebSocket';
+import { ComponentProps, useCallback } from 'react';
 import ReactFlow, {
     Background,
     BackgroundVariant,
@@ -8,6 +8,8 @@ import ReactFlow, {
     NodeChange,
     useReactFlow,
 } from 'reactflow';
+import { flowToJson } from 'util/flowToJson';
+import { clientSendFlowHandler } from 'websocket/handler/client/clientSendFlowHandler';
 import { serverWebSocketMessageDispatcher } from 'websocket/WebSocketMessageDispatcher';
 
 type ReactFlowProps = ComponentProps<typeof ReactFlow>;
@@ -20,24 +22,36 @@ const Flow: React.FC<ReactFlowProps> = props => {
     };
 
     const h = (change: NodeChange[]) => {
-        //console.log(change);
         if (props.onNodesChange) {
             props.onNodesChange(change);
-            // const webSocketMessage = new WebSocketMessage('CLIENT_CONNECT', {
-            //     flow: flowToJson(rf),
-            // });
-            // sendMessage(webSocketMessage);
         }
     };
 
-    const { isConnected, sendMessage } = useWebSocket('ws://localhost:8080/ws/nodes', onMessage);
+    const { isConnected, sendMessage } = useFlowWebSocket('ws://localhost:8888/ws', onMessage);
+
+    const handleSave = useCallback(() => {
+        console.log('handle save');
+
+        clientSendFlowHandler(sendMessage, {
+            flow: flowToJson(rf),
+        });
+    }, [rf, sendMessage]);
 
     return (
-        <ReactFlow {...props} onNodesChange={h}>
-            <Controls />
-            <MiniMap />
-            <Background variant={'dots' as BackgroundVariant} gap={12} size={1} />
-        </ReactFlow>
+        <div style={{ width: '100%', height: '100%' }}>
+            <ReactFlow {...props} onNodesChange={h}>
+                <Controls />
+                <MiniMap />
+                <Background variant={'dots' as BackgroundVariant} gap={12} size={1} />
+            </ReactFlow>
+            <button
+                onClick={handleSave}
+                disabled={!isConnected}
+                style={{ position: 'absolute', top: 10, right: 10 }}
+            >
+                Save
+            </button>
+        </div>
     );
 };
 

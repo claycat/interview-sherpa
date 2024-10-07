@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -9,11 +8,9 @@ const GoogleRedirectPage = () => {
     const handleOAuthGoogle = async (code: string) => {
         try {
             console.log('CODE: ' + code);
-            const response = await axios.get(
-                `http://localhost:8080/oauth/login/google?code=${code}`,
-            );
-            const data = response.data;
-            alert('로그인 성공: ' + data);
+
+            window.location.href = `http://localhost:8888/oauth/login/google?code=${code}`;
+
             navigate('/success');
         } catch (error) {
             navigate('/fail');

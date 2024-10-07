@@ -6,7 +6,7 @@ import { ServerWebSocketCommandType } from './type/WebSocketCommandTypes';
 export const serverWebSocketMessageDispatcher = (
     message: string,
     rf: ReactFlowInstance,
-    messageSender: (message: string) => void,
+    messageSender: (destination: string, message: string) => void,
 ) => {
     const webSocketMessage = ServerWebSocketMessage.deserialize(message);
 
