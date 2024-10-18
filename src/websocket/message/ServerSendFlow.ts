@@ -1,7 +1,8 @@
 import { UUID } from 'crypto';
 import { ReactFlowJsonObject } from 'reactflow';
+import { WebSocketMessage } from './WebSocketMessage';
 
-export interface ServerSendFlow {
+export interface ServerSendFlow extends WebSocketMessage {
     flowId: UUID;
     flow: ReactFlowJsonObject;
 }

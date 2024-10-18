@@ -74,7 +74,6 @@ const useFlowWebSocket = (brokerURL: string) => {
                 destination: destination,
                 body: JSON.stringify(message),
             };
-            console.log('Sending payload:', payload);
             client.current.publish(payload);
         } else {
             console.warn('Cannot send message, STOMP client is not connected');

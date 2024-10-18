@@ -1,0 +1,4 @@
+const exampleFlow: string =
+    '{"nodes":[{"id":"node-1","type":"customNode","data":{"label":"Node 1","question":"Javascript","answers":[]},"position":{"x":630,"y":-125},"width":83,"height":43,"selected":false,"dragging":false,"positionAbsolute":{"x":630,"y":-125}},{"id":"node-2","type":"customNode","data":{"label":"Node node-2","question":"What data types are in javascript?","answers":["Primitive data types for javascript include boolean, null, undefined, number, bigint, string, symbol"]},"position":{"x":304,"y":-238},"width":222,"height":42,"selected":false,"dragging":false,"positionAbsolute":{"x":304,"y":-238},"resizing":false,"style":{"width":222,"height":42}}],"edges":[{"id":"enode-2-node-1","source":"node-2","target":"node-1"}],"viewport":{"x":-70,"y":748,"zoom":2}}';
+
+export default exampleFlow;

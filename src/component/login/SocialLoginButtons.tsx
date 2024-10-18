@@ -4,8 +4,6 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import { Button, Divider } from '@mui/material';
-import GoogleIcon from 'assets/icons/GoogleIcon';
-import { handleOAuthGoogle } from './loginHandler';
 
 const Container = styled.div`
     display: flex;
@@ -62,15 +60,6 @@ const SocialLoginButtons: React.FC = () => {
             <LoginContainer>
                 <LoginHeader>Sign In / Register</LoginHeader>
                 <Divider style={{ marginBottom: '30px' }} />
-                <Button
-                    variant="outlined"
-                    startIcon={<GoogleIcon />}
-                    style={{ fontSize: '1.3vw' }}
-                    css={[buttonStyle, googleButtonStyle]}
-                    onClick={() => handleOAuthGoogle()}
-                >
-                    Continue with Google
-                </Button>
                 <Button
                     variant="contained"
                     startIcon={<GitHubIcon />}
