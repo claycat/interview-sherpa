@@ -54,6 +54,19 @@ const labelStyle = css`
     width: 100%;
     text-align: center;
 `;
+const handleStyle = css`
+    width: 12px;
+    height: 12px;
+    background: #555;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background 0.2s;
+
+    &:hover {
+        background: #000;
+    }
+`;
+
 const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data, selected }) => {
     const [hover, setHover] = useState(false);
 
@@ -75,25 +88,9 @@ const CustomNode: FC<NodeProps<CustomNodeData>> = ({ data, selected }) => {
                 <TiDeleteOutline css={iconStyle} />
             </div>
             <NodeResizer color="#ff0071" isVisible={selected} minWidth={50} minHeight={30} />
-            <Handle
-                type="target"
-                position={Position.Left}
-                onClick={event => {
-                    event.stopPropagation();
-                    data.onAddNode(Position.Left);
-                }}
-                style={{ cursor: 'pointer' }}
-            />
+            <Handle type="source" position={Position.Left} id="handle-left" />
             <div css={labelStyle}>{data.question}</div>
-            <Handle
-                type="source"
-                position={Position.Right}
-                onClick={event => {
-                    event.stopPropagation();
-                    data.onAddNode(Position.Right);
-                }}
-                style={{ cursor: 'pointer' }}
-            />
+            <Handle type="source" position={Position.Right} id="handle-right" />
         </div>
     );
 };

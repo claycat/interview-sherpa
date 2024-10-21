@@ -1,3 +1,4 @@
+import DeletableEdge from 'component/edges/DeletableEdge';
 import Flow from 'component/flow/Flow';
 import TopicPageHeader from 'component/header/TopicPageHeader';
 import Modal from 'component/modal/Modal';
@@ -8,7 +9,7 @@ import { useWebSocket } from 'hook/websocket/WebSocketContext';
 import useFlowSubscription from 'hook/websocket/subscription/useFlowSubscription';
 import { useCallback, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { Position, useReactFlow } from 'reactflow';
+import { ConnectionMode, useReactFlow } from 'reactflow';
 
 import 'reactflow/dist/style.css';
 import { flowToJson } from 'util/flowToJson';
@@ -17,32 +18,15 @@ const nodeTypes = {
     customNode: CustomNode,
 };
 
+const edgeTypes = {
+    deletableEdge: DeletableEdge,
+};
 const TopicPage = () => {
-    const {
-        nodes,
-        edges,
-        setNodes,
-        setEdges,
-        onNodesChange,
-        onEdgesChange,
-        addNode,
-        updateNodeData,
-    } = useFlow([], []);
+    const { nodes, edges, setNodes, setEdges, onNodesChange, onEdgesChange, updateNodeData } =
+        useFlow([], []);
 
     const rf = useReactFlow();
     const params = useParams();
-
-    // useEffect(() => {
-    //     const setReactFlow = async () => {
-    //         const response = await apiClient.get(`/flow/${params.topic_id}`);
-    //         const reactFlow: ReactFlowJsonObject = response.data.data.flow;
-    //         console.log(reactFlow);
-    //         rf.setNodes(reactFlow.nodes);
-    //         rf.setEdges(reactFlow.edges);
-    //         rf.setViewport(reactFlow.viewport);
-    //     };
-    //     // setReactFlow();
-    // }, []);
 
     const { isModalOpen, modalNodeId, handleShowModal, handleCloseModal } = useModal();
 
@@ -52,7 +36,6 @@ const TopicPage = () => {
         ...node,
         data: {
             ...node.data,
-            onAddNode: (pos: Position) => addNode(node.id, pos),
             setIsModalOpen: (open: boolean) =>
                 open ? handleShowModal(node.id) : handleCloseModal(),
         },
@@ -80,18 +63,19 @@ const TopicPage = () => {
                 <Flow
                     nodes={updatedNodes}
                     edges={edges}
+                    connectionMode={ConnectionMode.Loose}
                     onNodesChange={onNodesChange}
                     onEdgesChange={onEdgesChange}
-                    nodesConnectable={false}
                     fitView={false}
                     nodeTypes={nodeTypes}
+                    edgeTypes={edgeTypes}
                     zoomOnScroll={!isModalOpen}
                 />
                 {currentNode && (
                     <Modal
                         show={isModalOpen}
                         onClose={handleCloseModal}
-                        data={currentNode.data}
+                        data={currentNode}
                         onUpdate={newData => updateNodeData(currentNode.id, newData)}
                     />
                 )}

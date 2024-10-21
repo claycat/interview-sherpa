@@ -17,6 +17,8 @@ const StyledTextField = styled(TextField)`
     }
     .MuiInputBase-input {
         padding-bottom: 30px;
+        font-size: 0.8rem;
+        font-family: 'Open Sans', sans-serif; /* Desired font family */
     }
 `;
 
@@ -69,18 +71,23 @@ const EditableTextField: FC<TextFieldProps> = ({ text, setText, handleDelete }) 
             InputProps={{
                 endAdornment: (
                     <InputAdornment position="end">
-                        <IconButton onClick={handleEditClick}>
-                            <EditIcon />
+                        {!isEditing ? (
+                            <IconButton onClick={handleEditClick} aria-label="edit" size="small">
+                                <EditIcon fontSize="small" />
+                            </IconButton>
+                        ) : (
+                            <IconButton onClick={handleSaveClick} aria-label="save" size="small">
+                                <CheckIcon fontSize="small" />
+                            </IconButton>
+                        )}
+                        <IconButton onClick={handleCopyClick} aria-label="copy" size="small">
+                            <ContentCopyIcon fontSize="small" />
                         </IconButton>
-                        <IconButton onClick={handleSaveClick}>
-                            <CheckIcon />
-                        </IconButton>
-                        <IconButton onClick={handleCopyClick}>
-                            <ContentCopyIcon />
-                        </IconButton>
-                        <IconButton onClick={handleDelete}>
-                            <DeleteIcon />
-                        </IconButton>
+                        {handleDelete && (
+                            <IconButton onClick={handleDelete} aria-label="delete" size="small">
+                                <DeleteIcon fontSize="small" />
+                            </IconButton>
+                        )}
                     </InputAdornment>
                 ),
             }}
