@@ -1,10 +1,8 @@
 import React, { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from 'state/authStore';
 
 const OAuthCallback: React.FC = () => {
     const fetchSession = useAuthStore(state => state.fetchSession);
-    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchSessionData = async () => {

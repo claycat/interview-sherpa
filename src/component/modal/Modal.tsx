@@ -6,7 +6,7 @@ import { NodeContent } from 'type/NodeContent';
 import { useParams } from 'react-router-dom';
 import { Node } from 'reactflow';
 import { CloseButton, Form, ModalContainer, ModalOverlay, Title } from './Modal.styles';
-import CommentSection from './answer/CommentSection';
+import CommentSection from './comment/CommentSection';
 import { useComments } from './hooks/useComments';
 
 interface ModalProps {

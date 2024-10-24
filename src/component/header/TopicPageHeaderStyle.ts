@@ -66,12 +66,24 @@ export const SaveIconWrapper = styled(IconWrapper)({});
 
 export const ShareIconWrapper = styled(IconWrapper)({});
 
+export const DeveloperIconWrapper = styled('div')({
+    width: '40px',
+    flexDirection: 'row',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    cursor: 'pointer',
+    color: '#707070',
+});
+
 export const InquiryIconWrapper = styled(IconWrapper)({
     width: '50px',
+    marginRight: '10px',
 });
 
 export const SignInIconWrapper = styled(IconWrapper)({
     width: '40px',
+    marginRight: '10px',
 });
 
 export const LeftSection = styled('div')({

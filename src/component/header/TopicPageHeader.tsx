@@ -1,47 +1,49 @@
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import LoginIcon from '@mui/icons-material/Login';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import SaveIcon from '@mui/icons-material/Save';
 import ShareIcon from '@mui/icons-material/Share';
-import TopicHeaderModal from 'component/modal/TopicHeaderModal';
-import useHeaderModal from 'hook/modal/useTopicHeaderModal';
 import { useState } from 'react';
 import { useAuthStore } from 'state/authStore';
 import SavedIcon from '../../assets/icons/Saved.svg';
 import UnsavedIcon from '../../assets/icons/Unsaved.svg';
-import claycat from '../../assets/image/claycat.jpg';
 
+import SaveModal from 'component/modal/SaveModal';
+import { useParams } from 'react-router-dom';
+import { useTitleStore } from 'state/titleStore';
+import { DashboardDropdown } from './dropdown/DashboardDropdown';
+import { ProfileDropdown } from './dropdown/ProfileDropdown';
 import {
-    DeveloperIcon,
     HeaderTitleInput,
     HeaderTitleSection,
     InquiryIconWrapper,
     LeftSection,
-    ProfileImage,
     RightSection,
     SaveIconWrapper,
     ShareIconWrapper,
-    SignInIconWrapper,
     StatusText,
     StyledAppBar,
     StyledToolbar,
 } from './TopicPageHeaderStyle';
 
-const defaultProfilePictureUrl = 'https://example.com/default-profile-picture.jpg';
-
 const TopicPageHeader = () => {
-    const { openModalType, isSaveModalOpen, isShareModalOpen, handleOpenModal, handleCloseModal } =
-        useHeaderModal();
     const { isAuthenticated, user } = useAuthStore();
-    const [title, setTitle] = useState('');
+    const { topic_id } = useParams();
+    const { title, setTitle, saveTitleToServer } = useTitleStore();
 
-    const isModalOpen = isSaveModalOpen || isShareModalOpen;
+    const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+
+    const handleOpenSaveModal = () => {
+        setIsSaveModalOpen(true);
+    };
+    const handleCloseSaveModal = () => {
+        setIsSaveModalOpen(false);
+    };
 
     return (
         <StyledAppBar position="static">
             <StyledToolbar disableGutters>
                 <LeftSection>
-                    <DeveloperIcon src={claycat} alt="DeveloperIcon" />
+                    <DashboardDropdown />
                     <HeaderTitleSection>
                         {isAuthenticated ? (
                             <img
@@ -61,14 +63,15 @@ const TopicPageHeader = () => {
                             type="text"
                             value={title}
                             onChange={e => setTitle(e.target.value)}
-                            placeholder="Enter header title..."
+                            onBlur={() => saveTitleToServer(topic_id)}
+                            placeholder="Untitled"
                         />
                     </HeaderTitleSection>
-                    <SaveIconWrapper onClick={() => handleOpenModal('save')}>
+                    <SaveIconWrapper onClick={handleOpenSaveModal}>
                         <SaveIcon style={{ fontSize: '20px' }} />
                         <span> Save</span>
                     </SaveIconWrapper>
-                    <ShareIconWrapper onClick={() => handleOpenModal('share')}>
+                    <ShareIconWrapper onClick={handleOpenSaveModal}>
                         <ShareIcon style={{ fontSize: '20px' }} />
                         <span> Share</span>
                     </ShareIconWrapper>
@@ -81,24 +84,11 @@ const TopicPageHeader = () => {
                         <QuestionMarkIcon style={{ fontSize: '20px' }} />
                         <KeyboardArrowDownIcon style={{ width: '20px' }} />
                     </InquiryIconWrapper>
-                    {isAuthenticated ? (
-                        <ProfileImage
-                            src={user?.profileURL || defaultProfilePictureUrl}
-                            alt={`${user?.name}'s profile`}
-                        />
-                    ) : (
-                        <SignInIconWrapper>
-                            <LoginIcon style={{ fontSize: '20px' }} />
-                        </SignInIconWrapper>
-                    )}
+                    <ProfileDropdown />
                 </RightSection>
             </StyledToolbar>
 
-            <TopicHeaderModal
-                open={isModalOpen}
-                onClose={handleCloseModal}
-                modalType={openModalType}
-            />
+            <SaveModal open={isSaveModalOpen} onClose={handleCloseSaveModal} />
         </StyledAppBar>
     );
 };

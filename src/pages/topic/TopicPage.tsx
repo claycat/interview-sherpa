@@ -59,7 +59,7 @@ const TopicPage = () => {
     return (
         <>
             <TopicPageHeader />
-            <div style={{ width: '100vw', height: '100vh' }}>
+            <div style={{ width: '100vw', height: 'calc(100vh - 50px)' }}>
                 <Flow
                     nodes={updatedNodes}
                     edges={edges}

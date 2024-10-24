@@ -12,7 +12,7 @@ const modalStyle = {
     borderRadius: '4px',
     p: 4,
     outline: 'none',
-    position: 'relative', // Required for absolute positioning of the close button
+    position: 'relative',
 };
 
 interface HeaderModalProps {

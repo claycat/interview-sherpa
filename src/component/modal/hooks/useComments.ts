@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { CommentType } from '../answer/CommentType';
-import { PostCommentResponseDto, addComment, fetchComments } from '../answer/commentsApi';
+import { CommentType } from '../comment/CommentType';
+import { PostCommentResponseDto, addComment, fetchComments } from '../comment/commentsApi';
 
 interface UseCommentsProps {
     topicId: string;

@@ -1,4 +1,4 @@
-import { CommentType } from 'component/modal/answer/CommentType';
+import { CommentType } from 'component/modal/comment/CommentType';
 
 export type NodeContent = {
     label: string;

@@ -43,6 +43,7 @@ export const useAuthStore = create<AuthState>(set => ({
                 isAuthenticated: false,
                 user: null,
             });
+            window.location.href = `/topic`;
         } catch (error) {
             console.error('Logout failed', error);
         }
