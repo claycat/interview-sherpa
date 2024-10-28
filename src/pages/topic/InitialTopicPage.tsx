@@ -70,8 +70,7 @@ const InitialTopicPage = () => {
 
             const sendAuthenticatedRequest = async () => {
                 try {
-                    console.log('isAuthenticated send');
-                    const response = await apiClient.post('/flow', {
+                    const response = await apiClient.post('/flows', {
                         memberId: user?.id,
                         flow: JSON.stringify(exampleFlowObject),
                         title,

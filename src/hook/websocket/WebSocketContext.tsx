@@ -2,10 +2,12 @@ import useFlowWebSocket from 'hook/useFlowWebSocket';
 import React, { createContext, useContext } from 'react';
 import { WebSocketMessage } from 'websocket/message/WebSocketMessage';
 
+export type SendMessageType = (destination: string, message: WebSocketMessage) => void;
+
 interface WebSocketContextProps {
     isConnected: boolean;
     subscribe: (topic: string, callback: (message: string) => void) => () => void;
-    sendMessage: (destination: string, message: WebSocketMessage) => void;
+    sendMessage: SendMessageType;
 }
 
 const WebSocketContext = createContext<WebSocketContextProps | undefined>(undefined);

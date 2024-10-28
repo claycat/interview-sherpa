@@ -14,7 +14,7 @@ export const useTitleStore = create<TitleState>((set, get) => ({
         const { title } = get();
         if (flowId === undefined) return;
         try {
-            const response = await apiClient.patch(`/flow/${flowId}/title`, {
+            const response = await apiClient.patch(`/flows/${flowId}/title`, {
                 title: title,
             });
         } catch (error) {

@@ -12,28 +12,46 @@ interface User {
 interface AuthState {
     isAuthenticated: boolean;
     user: User | null;
-    fetchSession: () => Promise<void>;
+    sessionExpired: boolean;
+    fetchSession: () => Promise<{ user: User | null; sessionExpired: boolean }>;
     logout: () => Promise<void>;
-    setAuth: (isAuth: boolean, user: User | null) => void;
+    setAuth: (isAuth: boolean, user: User | null, sessionExpired?: boolean) => void;
 }
 
 export const useAuthStore = create<AuthState>(set => ({
     isAuthenticated: false,
     user: null,
+    sessionExpired: false,
     fetchSession: async () => {
         try {
             const response = await apiClient.get('/session', { withCredentials: true });
             const user = response.data;
+
             set({
                 isAuthenticated: true,
                 user,
+                sessionExpired: false,
             });
-        } catch (error) {
+
+            return { user, sessionExpired: false };
+        } catch (error: any) {
             console.error('Failed to fetch session', error);
-            set({
-                isAuthenticated: false,
-                user: null,
-            });
+
+            if (error.response && error.response.status === 401) {
+                set({
+                    isAuthenticated: false,
+                    user: null,
+                    sessionExpired: true,
+                });
+                return { user: null, sessionExpired: true };
+            } else {
+                set({
+                    isAuthenticated: false,
+                    user: null,
+                    sessionExpired: false,
+                });
+                return { user: null, sessionExpired: false };
+            }
         }
     },
     logout: async () => {
@@ -42,13 +60,15 @@ export const useAuthStore = create<AuthState>(set => ({
             set({
                 isAuthenticated: false,
                 user: null,
+                sessionExpired: false,
             });
             window.location.href = `/topic`;
         } catch (error) {
             console.error('Logout failed', error);
         }
     },
-    setAuth: (isAuth, user) => set({ isAuthenticated: isAuth, user }),
+    setAuth: (isAuth, user, sessionExpired = false) =>
+        set({ isAuthenticated: isAuth, user, sessionExpired }),
 }));
 
 export const authStore = useAuthStore;

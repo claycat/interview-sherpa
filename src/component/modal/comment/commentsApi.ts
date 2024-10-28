@@ -19,10 +19,11 @@ export interface PostCommentResponseDto {
 
 export const fetchComments = async (topicId: string, nodeId: string): Promise<CommentType[]> => {
     const response = await apiClient.get<ApiResponse<GetCommentsResponseDto>>(
-        `/flow/${topicId}/node/${nodeId}/comments`,
+        `/flows/${topicId}/nodes/${nodeId}/comments`,
     );
 
     const comments = response.data.data.comments;
+    console.log(comments);
     const commentMap: { [key: string]: CommentType } = {};
     const rootComments: CommentType[] = [];
 
@@ -73,11 +74,12 @@ export const addComment = async (
     parentId: string | null = null,
 ): Promise<PostCommentResponseDto> => {
     const response = await apiClient.post<ApiResponse<PostCommentResponseDto>>(
-        `/flow/${topicId}/node/${nodeId}/comments`,
+        `/flows/${topicId}/nodes/${nodeId}/comments`,
         {
             content,
             memberId,
             parentId,
+            flowId: topicId,
         },
     );
 

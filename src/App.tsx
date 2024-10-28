@@ -13,9 +13,17 @@ import './App.css';
 
 function App() {
     const fetchSession = useAuthStore(state => state.fetchSession);
-
     useEffect(() => {
         fetchSession();
+
+        const interval = setInterval(
+            () => {
+                fetchSession();
+            },
+            3 * 60 * 1000,
+        );
+
+        return () => clearInterval(interval);
     }, [fetchSession]);
 
     return (

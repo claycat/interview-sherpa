@@ -2,14 +2,18 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import SaveIcon from '@mui/icons-material/Save';
 import ShareIcon from '@mui/icons-material/Share';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuthStore } from 'state/authStore';
 import SavedIcon from '../../assets/icons/Saved.svg';
 import UnsavedIcon from '../../assets/icons/Unsaved.svg';
 
 import SaveModal from 'component/modal/SaveModal';
+import { SendMessageType } from 'hook/websocket/WebSocketContext';
+import moment from 'moment';
 import { useParams } from 'react-router-dom';
+import { useReactFlow } from 'reactflow';
 import { useTitleStore } from 'state/titleStore';
+import { flowToJson } from 'util/flowToJson';
 import { DashboardDropdown } from './dropdown/DashboardDropdown';
 import { ProfileDropdown } from './dropdown/ProfileDropdown';
 import {
@@ -20,17 +24,18 @@ import {
     RightSection,
     SaveIconWrapper,
     ShareIconWrapper,
-    StatusText,
     StyledAppBar,
     StyledToolbar,
 } from './TopicPageHeaderStyle';
 
-const TopicPageHeader = () => {
+const TopicPageHeader = ({ sendMessage }: { sendMessage?: SendMessageType }) => {
     const { isAuthenticated, user } = useAuthStore();
     const { topic_id } = useParams();
     const { title, setTitle, saveTitleToServer } = useTitleStore();
+    const rf = useReactFlow();
 
     const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+    const [lastSuccessTime, setLastSuccessTime] = useState<string | null>(null);
 
     const handleOpenSaveModal = () => {
         setIsSaveModalOpen(true);
@@ -38,6 +43,21 @@ const TopicPageHeader = () => {
     const handleCloseSaveModal = () => {
         setIsSaveModalOpen(false);
     };
+
+    useEffect(() => {
+        if (sendMessage === undefined) return;
+
+        const intervalId = setInterval(async () => {
+            try {
+                sendMessage(`/app/flow/${topic_id}/patch`, { flow: flowToJson(rf) });
+                setLastSuccessTime(moment().format('h:mm:ss A'));
+            } catch (error) {
+                console.error('Failed to save title:', error);
+            }
+        }, 5000);
+
+        return () => clearInterval(intervalId);
+    }, [topic_id, saveTitleToServer]);
 
     return (
         <StyledAppBar position="static">
@@ -67,20 +87,27 @@ const TopicPageHeader = () => {
                             placeholder="Untitled"
                         />
                     </HeaderTitleSection>
-                    <SaveIconWrapper onClick={handleOpenSaveModal}>
+
+                    <SaveIconWrapper
+                        onClick={() => {
+                            if (!isAuthenticated) handleOpenSaveModal();
+                        }}
+                    >
                         <SaveIcon style={{ fontSize: '20px' }} />
-                        <span> Save</span>
+                        {!isAuthenticated && <span> Save</span>}
+                        {isAuthenticated && <span>Last Save {lastSuccessTime}</span>}
                     </SaveIconWrapper>
                     <ShareIconWrapper onClick={handleOpenSaveModal}>
                         <ShareIcon style={{ fontSize: '20px' }} />
                         <span> Share</span>
                     </ShareIconWrapper>
-                    <StatusText isAuthenticated={isAuthenticated}>
-                        {isAuthenticated ? 'Logged In' : 'Not Logged In'}
-                    </StatusText>
                 </LeftSection>
                 <RightSection>
-                    <InquiryIconWrapper>
+                    <InquiryIconWrapper
+                        onClick={() => {
+                            alert('working on it...');
+                        }}
+                    >
                         <QuestionMarkIcon style={{ fontSize: '20px' }} />
                         <KeyboardArrowDownIcon style={{ width: '20px' }} />
                     </InquiryIconWrapper>

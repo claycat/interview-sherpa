@@ -1,6 +1,18 @@
+import apiClient from 'common/axios/axios';
 import { ReactFlowInstance } from 'reactflow';
+import { titleStore } from 'state/titleStore';
+import { flowToJson } from 'util/flowToJson';
 import { authStore } from '../../state/authStore';
 type HandleOAuthGoogle = (onClose: () => void, reactFlow: ReactFlowInstance) => void;
+
+const getFlowIdFromPath = (): string | null => {
+    const pathSegments = window.location.pathname.split('/');
+    const topicIndex = pathSegments.findIndex(segment => segment === 'topic');
+    if (topicIndex !== -1 && pathSegments.length > topicIndex + 1) {
+        return pathSegments[topicIndex + 1];
+    }
+    return null;
+};
 
 export const handleOAuthGoogle: HandleOAuthGoogle = (onClose, reactFlow) => {
     const popupWidth = 500;
@@ -28,13 +40,39 @@ export const handleOAuthGoogle: HandleOAuthGoogle = (onClose, reactFlow) => {
 
         if (event.data === 'oauth_success') {
             await authStore.getState().fetchSession();
-            oauthWindow.close();
-            onClose();
-            window.removeEventListener('message', handleMessage);
+            const user = authStore.getState().user;
+            const title = titleStore.getState().title;
 
-            window.location.href = `/topic`;
+            const flowId = getFlowIdFromPath();
+            let redirectPath = '/topic';
+
+            try {
+                if (flowId) {
+                    // user logged in but session was expired, so update flow based on current status
+                    await apiClient.patch(`/flows/${flowId}`, {
+                        memberId: user?.id,
+                        flow: flowToJson(reactFlow),
+                        title,
+                    });
+                    redirectPath = `/topic/${flowId}`;
+                } else {
+                    const response = await apiClient.post('/flows', {
+                        memberId: user?.id,
+                        flow: flowToJson(reactFlow),
+                        title,
+                    });
+                    const flowId = response.data.data.flowId;
+                    redirectPath = `/topic/${flowId}`;
+                }
+                window.location.href = redirectPath;
+            } catch (e: any) {
+                console.error(e);
+            } finally {
+                oauthWindow.close();
+                onClose();
+            }
         }
     };
 
-    window.addEventListener('message', handleMessage);
+    window.addEventListener('message', handleMessage, { once: true });
 };

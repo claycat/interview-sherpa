@@ -51,14 +51,12 @@ const TopicPage = () => {
     }, [isConnected, params.topic_id, sendMessage]);
 
     const handleSave = useCallback(() => {
-        console.log('====================sending flow message below====================');
-        console.log(rf.toObject());
         sendMessage(`/app/flow/${params.topic_id}/patch`, { flow: flowToJson(rf) });
     }, [params.topic_id, rf, sendMessage]);
 
     return (
         <>
-            <TopicPageHeader />
+            <TopicPageHeader sendMessage={sendMessage} />
             <div style={{ width: '100vw', height: 'calc(100vh - 50px)' }}>
                 <Flow
                     nodes={updatedNodes}
@@ -79,7 +77,7 @@ const TopicPage = () => {
                         onUpdate={newData => updateNodeData(currentNode.id, newData)}
                     />
                 )}
-                <button
+                {/* <button
                     onClick={handleSave}
                     disabled={!isConnected}
                     style={{ position: 'absolute', top: 60, right: 10 }}
@@ -99,7 +97,7 @@ const TopicPage = () => {
                     style={{ position: 'absolute', top: 120, right: 10 }}
                 >
                     refresh
-                </button>
+                </button> */}
             </div>
         </>
     );

@@ -2,8 +2,9 @@ import styled from '@emotion/styled';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Dropdown, DropdownItem, DropdownMenu } from 'semantic-ui-react';
 
-import DashboardModal from 'component/modal/DashboardModal';
+import DashboardModal from 'component/modal/dashboard/DashboardModal';
 import { useState } from 'react';
+import { useAuthStore } from 'state/authStore';
 import claycat from '../../../assets/image/claycat.jpg';
 import { DeveloperIcon } from '../TopicPageHeaderStyle';
 
@@ -23,6 +24,7 @@ const TriggerWrapper = styled.span`
 
 export const DashboardDropdown = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const { isAuthenticated } = useAuthStore();
 
     const handleOpenModal = () => {
         console.log('open');
@@ -55,8 +57,13 @@ export const DashboardDropdown = () => {
                 icon={<KeyboardArrowDownIcon />}
             >
                 <DropdownMenu>
-                    <DropdownItem text="New" />
-                    <DropdownItem text="Dashboard" onClick={handleOpenModal} />
+                    <DropdownItem
+                        text="New"
+                        onClick={() => {
+                            window.location.href = `/topic`;
+                        }}
+                    />
+                    {isAuthenticated && <DropdownItem text="Dashboard" onClick={handleOpenModal} />}
                 </DropdownMenu>
             </Dropdown>
         </CenteredDropdownContainer>

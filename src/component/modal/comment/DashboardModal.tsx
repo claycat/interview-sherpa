@@ -1,8 +1,13 @@
 /** @jsxImportSource @emotion/react */
 import { Global } from '@emotion/react';
+import apiClient from 'common/axios/axios';
+import moment from 'moment';
+import { useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { FaCrown, FaUserCircle } from 'react-icons/fa';
+import { useParams } from 'react-router-dom';
 import { Icon, Input, Menu, MenuItem, Modal, Popup } from 'semantic-ui-react';
+import { useAuthStore } from 'state/authStore';
 import {
     ButtonsContainer,
     CloseIcon,
@@ -21,16 +26,51 @@ import {
     UserSection,
     UserStatus,
     dimmerStyle,
-} from './DashboardModal.styles';
-const DashboardModal = ({ open, onClose }: any) => {
-    const handleDelete = (itemName: string) => {
-        console.log(`Delete item: ${itemName}`);
-        // Placeholder for delete logic (e.g., API call to delete item)
+} from '../dashboard/DashboardModal.styles';
+
+export interface DashboardFlowSummary {
+    id: string;
+    title: string;
+    updatedAt: Date;
+    createdAt: Date;
+}
+
+interface DashboardModalProps {
+    open: boolean;
+    onClose: () => void;
+}
+
+const DashboardModal = ({ open, onClose }: DashboardModalProps) => {
+    const [flowSummary, setFlowSummary] = useState<DashboardFlowSummary[]>([]);
+    const { topic_id } = useParams();
+    const { user } = useAuthStore();
+
+    const handleDelete = (id: string) => {
+        console.log(`Delete item: ${id}`);
+        if (id === topic_id) {
+            alert('Cannot delete the current diagram');
+            return;
+        }
     };
+
+    const fetchDiagrams = async () => {
+        try {
+            const response = await apiClient.get(`/members/${user?.id}/flows`);
+            console.log(response.data.data.flows);
+            setFlowSummary(response.data.data.flows);
+        } catch (error) {
+            console.error('Failed to fetch diagrams', error);
+        }
+    };
+
+    useEffect(() => {
+        if (open) {
+            fetchDiagrams();
+        }
+    }, [open]);
 
     return (
         <>
-            {/* Global style to override the default dimmer styles */}
             <Global styles={dimmerStyle} />
 
             <Modal
@@ -43,7 +83,6 @@ const DashboardModal = ({ open, onClose }: any) => {
                 <CloseIcon name="close" size="large" onClick={onClose} />
                 <ModalContent>
                     <ModalContentWrapper>
-                        {/* Sidebar Section */}
                         <Sidebar>
                             <UserSection>
                                 <FaUserCircle
@@ -66,7 +105,6 @@ const DashboardModal = ({ open, onClose }: any) => {
                                     Shared With Me
                                 </MenuItem>
                             </Menu>
-                            {/* Buttons Section */}
                             <ButtonsContainer>
                                 <UpgradeButton color="orange" size="small" fluid>
                                     <FaCrown style={{ marginRight: '8px' }} />
@@ -74,10 +112,7 @@ const DashboardModal = ({ open, onClose }: any) => {
                                 </UpgradeButton>
                             </ButtonsContainer>
                         </Sidebar>
-
-                        {/* Main Content Section */}
                         <MainContent>
-                            {/* Search Bar */}
                             <SearchSegment basic>
                                 <Input
                                     icon="search"
@@ -94,37 +129,15 @@ const DashboardModal = ({ open, onClose }: any) => {
                                     <DiagramColumn>Date Created</DiagramColumn>
                                 </DiagramTableHeader>
                                 <DiagramListContainer>
-                                    {[
-                                        {
-                                            name: 'Interview Sherpa',
-                                            modified: 'Today at 12:38 AM',
-                                            created: 'September 7th 2024, 5:18 PM',
-                                        },
-                                        {
-                                            name: 'Tikteever-v2.0',
-                                            modified: 'September 8th 2024, 1:07 AM',
-                                            created: 'May 15th 2024, 4:24 PM',
-                                        },
-                                        {
-                                            name: 'Untitled Diagram',
-                                            modified: 'October 7th 2024, 10:49 PM',
-                                            created: 'October 7th 2024, 10:28 PM',
-                                        },
-                                        {
-                                            name: 'Hanwha',
-                                            modified: 'September 7th 2024, 5:18 PM',
-                                            created: 'September 2nd 2024, 2:03 PM',
-                                        },
-                                        {
-                                            name: 'Tikteer-v1.0',
-                                            modified: 'May 15th 2024, 4:24 PM',
-                                            created: 'March 6th 2024, 2:46 PM',
-                                        },
-                                    ].map((diagram, index) => (
-                                        <DiagramListItem key={index}>
-                                            <DiagramColumn>{diagram.name}</DiagramColumn>
-                                            <DiagramColumn>{diagram.modified}</DiagramColumn>
-                                            <DiagramColumn>{diagram.created}</DiagramColumn>
+                                    {flowSummary.map(diagram => (
+                                        <DiagramListItem key={diagram.id}>
+                                            <DiagramColumn>{diagram.title}</DiagramColumn>
+                                            <DiagramColumn>
+                                                {moment(diagram.updatedAt).calendar().toString()}
+                                            </DiagramColumn>
+                                            <DiagramColumn>
+                                                {moment(diagram.createdAt).calendar().toString()}
+                                            </DiagramColumn>
                                             <DiagramColumn>
                                                 <Popup
                                                     content="Delete this item"
@@ -132,9 +145,7 @@ const DashboardModal = ({ open, onClose }: any) => {
                                                         <Icon
                                                             name="trash alternate outline"
                                                             color="grey"
-                                                            onClick={() =>
-                                                                handleDelete(diagram.name)
-                                                            }
+                                                            onClick={() => handleDelete(diagram.id)}
                                                         />
                                                     }
                                                     position="bottom center"

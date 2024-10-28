@@ -4,5 +4,6 @@ import { WebSocketMessage } from './WebSocketMessage';
 
 export interface ServerSendFlow extends WebSocketMessage {
     flowId: UUID;
+    title: string;
     flow: ReactFlowJsonObject;
 }
