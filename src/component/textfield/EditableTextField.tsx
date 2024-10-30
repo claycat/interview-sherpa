@@ -5,6 +5,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import { IconButton, InputAdornment, TextField } from '@mui/material';
 import { ChangeEvent, FC, useRef, useState } from 'react';
+import { Node } from 'reactflow';
+import { NodeContent } from 'type/NodeContent';
 
 const StyledTextField = styled(TextField)`
     flex-grow: 1;
@@ -26,9 +28,11 @@ interface TextFieldProps {
     text: string;
     setText: (text: string) => void;
     handleDelete?: () => void;
+    data: Node<NodeContent>;
+    onUpdate: (newData: NodeContent) => void;
 }
 
-const EditableTextField: FC<TextFieldProps> = ({ text, setText, handleDelete }) => {
+const EditableTextField: FC<TextFieldProps> = ({ text, setText, handleDelete, data, onUpdate }) => {
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const textFieldRef = useRef<HTMLInputElement | null>(null);
 
@@ -47,6 +51,8 @@ const EditableTextField: FC<TextFieldProps> = ({ text, setText, handleDelete }) 
 
     const handleSaveClick = () => {
         setIsEditing(false);
+        setText(text);
+        onUpdate({ ...data.data, question: text });
     };
 
     const handleTextChange = (event: ChangeEvent<HTMLInputElement>) => {

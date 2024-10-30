@@ -32,7 +32,7 @@ const Flow: React.FC<ReactFlowProps> = props => {
             position: { x: number; y: number },
             sourceHandleId: string | null,
         ) => {
-            const newNodeId = `node-${uuidv4()}`;
+            const newNodeId = `${uuidv4()}`;
 
             const newNode: Node<NodeContent> = {
                 id: newNodeId,

@@ -29,7 +29,7 @@ const edgeTypes = {
 };
 
 const InitialTopicPage = () => {
-    const { isAuthenticated } = useAuthStore();
+    const { isAuthenticated, fetchSession } = useAuthStore();
     const navigate = useNavigate();
 
     const { nodes, edges, setNodes, setEdges, onNodesChange, onEdgesChange, updateNodeData } =
@@ -64,27 +64,34 @@ const InitialTopicPage = () => {
     );
 
     useEffect(() => {
-        if (isAuthenticated) {
-            const user = authStore.getState().user;
-            const title = titleStore.getState().title;
+        const renewSession = async () => {
+            await fetchSession();
+            const authenticated = authStore.getState().isAuthenticated;
 
-            const sendAuthenticatedRequest = async () => {
-                try {
-                    const response = await apiClient.post('/flows', {
-                        memberId: user?.id,
-                        flow: JSON.stringify(exampleFlowObject),
-                        title,
-                    });
-                    const flowId = response.data.data.flowId;
-                    navigate(`/topic/${flowId}`);
-                } catch (error) {
-                    console.error('API request failed:', error);
-                }
-            };
+            if (authenticated) {
+                const user = authStore.getState().user;
+                const title = titleStore.getState().title;
 
-            sendAuthenticatedRequest();
-        }
-    }, [isAuthenticated, navigate]);
+                const sendAuthenticatedRequest = async () => {
+                    try {
+                        const response = await apiClient.post('/flows', {
+                            memberId: user?.id,
+                            flowContent: exampleFlowObject,
+                            title,
+                        });
+                        const flowId = response.data.data.flowId;
+                        navigate(`/topic/${flowId}`);
+                    } catch (error) {
+                        console.error('API request failed:', error);
+                    }
+                };
+
+                sendAuthenticatedRequest();
+            }
+        };
+
+        renewSession();
+    }, []);
 
     return (
         <>

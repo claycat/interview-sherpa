@@ -77,6 +77,13 @@ const TopicPage = () => {
                         onUpdate={newData => updateNodeData(currentNode.id, newData)}
                     />
                 )}
+                <button
+                    onClick={() => console.log(JSON.stringify(flowToJson(rf)))}
+                    disabled={!isConnected}
+                    style={{ position: 'absolute', top: 90, right: 10 }}
+                >
+                    Print
+                </button>
                 {/* <button
                     onClick={handleSave}
                     disabled={!isConnected}

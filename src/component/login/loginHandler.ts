@@ -51,14 +51,14 @@ export const handleOAuthGoogle: HandleOAuthGoogle = (onClose, reactFlow) => {
                     // user logged in but session was expired, so update flow based on current status
                     await apiClient.patch(`/flows/${flowId}`, {
                         memberId: user?.id,
-                        flow: flowToJson(reactFlow),
+                        flowContent: flowToJson(reactFlow),
                         title,
                     });
                     redirectPath = `/topic/${flowId}`;
                 } else {
                     const response = await apiClient.post('/flows', {
                         memberId: user?.id,
-                        flow: flowToJson(reactFlow),
+                        flowContent: flowToJson(reactFlow),
                         title,
                     });
                     const flowId = response.data.data.flowId;

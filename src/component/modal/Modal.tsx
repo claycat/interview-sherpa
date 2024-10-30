@@ -58,7 +58,12 @@ const Modal: FC<ModalProps> = ({ show, onClose, data, onUpdate }) => {
                 </CloseButton>
                 <Form onSubmit={handleSubmit}>
                     <Title>Question</Title>
-                    <EditableTextField text={question} setText={setQuestion} />
+                    <EditableTextField
+                        text={question}
+                        setText={setQuestion}
+                        data={data}
+                        onUpdate={onUpdate}
+                    />
                     <CommentSection
                         comments={comments ?? []}
                         addComment={addComment}
