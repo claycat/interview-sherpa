@@ -15,14 +15,12 @@ const useFlowSubscription = (flowId?: string) => {
         (message: string) => {
             try {
                 const flowMessage: ServerSendFlow = JSON.parse(message);
-                console.log(flowMessage);
                 reactFlow.setNodes(flowMessage.flowContent.nodes);
                 reactFlow.setEdges(flowMessage.flowContent.edges);
                 reactFlow.setViewport(flowMessage.flowContent.viewport);
 
                 const { setTitle } = titleStore.getState();
                 setTitle(flowMessage.title);
-                console.log(titleStore.getState().title);
             } catch (error) {
                 console.error('Error parsing flow message:', error);
             }

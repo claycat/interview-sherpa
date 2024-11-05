@@ -1,4 +1,5 @@
 import apiClient from 'common/axios/axios';
+import { Role } from 'constant/roles';
 import { UUID } from 'crypto';
 import { create } from 'zustand/react';
 
@@ -12,15 +13,18 @@ interface User {
 interface AuthState {
     isAuthenticated: boolean;
     user: User | null;
+    role: Role;
     sessionExpired: boolean;
     fetchSession: () => Promise<{ user: User | null; sessionExpired: boolean }>;
     logout: () => Promise<void>;
     setAuth: (isAuth: boolean, user: User | null, sessionExpired?: boolean) => void;
+    setRole: (role: Role) => void;
 }
 
 export const useAuthStore = create<AuthState>(set => ({
     isAuthenticated: false,
     user: null,
+    role: 'ANONYMOUS',
     sessionExpired: false,
     fetchSession: async () => {
         try {
@@ -69,6 +73,7 @@ export const useAuthStore = create<AuthState>(set => ({
     },
     setAuth: (isAuth, user, sessionExpired = false) =>
         set({ isAuthenticated: isAuth, user, sessionExpired }),
+    setRole: (role: Role) => set({ role }),
 }));
 
 export const authStore = useAuthStore;

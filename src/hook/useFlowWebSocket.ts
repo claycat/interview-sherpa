@@ -72,7 +72,8 @@ const useFlowWebSocket = (brokerURL: string) => {
         if (client.current && client.current.connected) {
             const payload: IPublishParams = {
                 destination: destination,
-                body: JSON.stringify(message),
+                body: JSON.stringify(message.payload),
+                headers: message.headers,
             };
             client.current.publish(payload);
         } else {

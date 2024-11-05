@@ -34,6 +34,7 @@ export const IconWrapper = styled('div')({
     alignItems: 'center',
     justifyContent: 'center',
     padding: '0 10px',
+    placeItems: 'center',
 });
 
 export const HeaderTitleSection = styled('div')({
@@ -65,6 +66,8 @@ export const HeaderTitleInput = styled('input')({
 export const SaveIconWrapper = styled(IconWrapper)({});
 
 export const ShareIconWrapper = styled(IconWrapper)({});
+
+export const RoleIconWrapper = styled(IconWrapper)({});
 
 export const DeveloperIconWrapper = styled('div')({
     width: '40px',

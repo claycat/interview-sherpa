@@ -1,3 +1,5 @@
+import { StompHeaders } from '@stomp/stompjs';
+import apiClient from 'common/axios/axios';
 import DeletableEdge from 'component/edges/DeletableEdge';
 import Flow from 'component/flow/Flow';
 import TopicPageHeader from 'component/header/TopicPageHeader';
@@ -5,6 +7,7 @@ import Modal from 'component/modal/Modal';
 import useModal from 'component/modal/hooks/useModal';
 import CustomNode from 'component/nodes/CustomNode';
 import useFlow from 'component/nodes/hooks/useFlow';
+import { Role, mergeRole } from 'constant/roles';
 import { useWebSocket } from 'hook/websocket/WebSocketContext';
 import useFlowSubscription from 'hook/websocket/subscription/useFlowSubscription';
 import { useCallback, useEffect } from 'react';
@@ -12,6 +15,7 @@ import { useParams } from 'react-router-dom';
 import { ConnectionMode, useReactFlow } from 'reactflow';
 
 import 'reactflow/dist/style.css';
+import { authStore } from 'state/authStore';
 import { flowToJson } from 'util/flowToJson';
 
 const nodeTypes = {
@@ -27,6 +31,7 @@ const TopicPage = () => {
 
     const rf = useReactFlow();
     const params = useParams();
+    const { user, setRole } = authStore();
 
     const { isModalOpen, modalNodeId, handleShowModal, handleCloseModal } = useModal();
 
@@ -45,13 +50,51 @@ const TopicPage = () => {
     useFlowSubscription(params.topic_id);
 
     useEffect(() => {
+        const fetchRoles = async () => {
+            let tokenRole: Role = 'ANONYMOUS';
+            let userRole: Role = 'ANONYMOUS';
+
+            const token = new URLSearchParams(window.location.search).get('token');
+            if (token) {
+                const response = await apiClient.get(`/flows/${params.topic_id}/tokens/${token}`);
+                tokenRole = response.data as Role;
+            }
+
+            if (user) {
+                try {
+                    const response = await apiClient.get(
+                        `/flows/${params.topic_id}/members/${user.id}/role`,
+                    );
+                    userRole = response.data.data.role as Role;
+                } catch (error) {
+                    console.error('Error fetching user role:', error);
+                }
+            }
+
+            const finalRole = mergeRole(tokenRole, userRole);
+            setRole(finalRole);
+        };
+        fetchRoles();
+    }, [params.topic_id, setRole, user]);
+
+    useEffect(() => {
         if (isConnected) {
-            sendMessage(`/app/flow/${params.topic_id}/get`, {});
+            const token = new URLSearchParams(window.location.search).get('token');
+            const headers: StompHeaders = {};
+
+            if (token) {
+                headers.token = token;
+            }
+
+            sendMessage(`/app/flow/${params.topic_id}/get`, {
+                payload: {},
+                headers,
+            });
         }
     }, [isConnected, params.topic_id, sendMessage]);
 
     const handleSave = useCallback(() => {
-        sendMessage(`/app/flow/${params.topic_id}/patch`, { flow: flowToJson(rf) });
+        //sendMessage(`/app/flow/${params.topic_id}/patch`, { flow: flowToJson(rf) });
     }, [params.topic_id, rf, sendMessage]);
 
     return (
