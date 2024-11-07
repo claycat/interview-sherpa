@@ -3,7 +3,7 @@ import apiClient from 'common/axios/axios';
 import { ApiResponse } from 'common/types/ApiResponse';
 import { UUID } from 'crypto';
 import moment from 'moment';
-import { CommentType, Reply } from './CommentType';
+import { CommentType } from './CommentType';
 
 export interface GetCommentsResponseDto {
     comments: CommentType[];
@@ -16,7 +16,6 @@ export interface PostCommentResponseDto {
     content: string;
     createdAt: string;
 }
-
 export const fetchComments = async (topicId: string, nodeId: string): Promise<CommentType[]> => {
     const response = await apiClient.get<ApiResponse<GetCommentsResponseDto>>(
         `/flows/${topicId}/nodes/${nodeId}/comments`,
@@ -25,43 +24,27 @@ export const fetchComments = async (topicId: string, nodeId: string): Promise<Co
     const comments = response.data.data.comments;
     console.log(comments);
     const commentMap: { [key: string]: CommentType } = {};
-    const rootComments: CommentType[] = [];
 
-    try {
-        comments.forEach(comment => {
-            commentMap[comment.id] = {
-                id: comment.id,
-                author: comment.author,
-                profileURL: comment.profileURL,
-                content: comment.content,
-                createdAt: moment(comment.createdAt).calendar(),
-                parentId: comment.parentId ?? null,
-                replies: [],
-            };
-        });
-        comments.forEach(comment => {
-            if (comment.parentId) {
-                const parent = commentMap[comment.parentId];
-                if (parent) {
-                    const reply: Reply = {
-                        id: comment.id,
-                        author: comment.author,
-                        profileURL: comment.profileURL,
-                        content: comment.content,
-                        createdAt: moment(comment.createdAt).calendar(),
-                        parentId: comment.parentId,
-                    };
-                    parent.replies.push(reply);
-                } else {
-                    rootComments.push(commentMap[comment.id]);
-                }
-            } else {
-                rootComments.push(commentMap[comment.id]);
+    comments.forEach(comment => {
+        commentMap[comment.id] = {
+            ...comment,
+            createdAt: moment(comment.createdAt).calendar(),
+            replies: [],
+        };
+    });
+
+    comments.forEach(comment => {
+        if (comment.parentId) {
+            const parent = commentMap[comment.parentId];
+            if (parent) {
+                parent.replies.push(commentMap[comment.id]);
             }
-        });
-    } catch (e) {
-        console.log(e);
-    }
+        }
+    });
+
+    const rootComments = comments
+        .filter(comment => !comment.parentId)
+        .map(comment => commentMap[comment.id]);
 
     return rootComments;
 };

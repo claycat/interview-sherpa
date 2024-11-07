@@ -1,11 +1,65 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { CommentType } from '../comment/CommentType';
+import { CommentType, GptCommentType } from '../comment/CommentType';
 import { PostCommentResponseDto, addComment, fetchComments } from '../comment/commentsApi';
 
 interface UseCommentsProps {
     topicId: string;
     nodeId: string;
 }
+
+interface UseCommentsProps {
+    topicId: string;
+    nodeId: string;
+}
+
+const initialTestComments: CommentType[] = [
+    {
+        id: '1',
+        author: 'Test User',
+        profileURL: 'https://avatar.iran.liara.run/public',
+        content: 'This is a test comment.',
+        parentId: null,
+        createdAt: new Date().toISOString(),
+        replies: [],
+        type: 'user',
+    },
+    {
+        id: '2',
+        author: 'Another User',
+        profileURL: 'https://avatar.iran.liara.run/public',
+        content: 'Another test comment.',
+        parentId: null,
+        createdAt: new Date().toISOString(),
+        replies: [],
+        type: 'user',
+    },
+
+    {
+        id: '3',
+        author: 'Another User',
+        profileURL: 'https://avatar.iran.liara.run/public',
+        content: 'Another test comment.',
+        parentId: '2',
+        createdAt: new Date().toISOString(),
+        replies: [],
+        type: 'user',
+    },
+    {
+        id: '4',
+        author: 'GPT AI',
+        profileURL: 'https://avatar.iran.liara.run/public',
+        content: 'This is a test GPT-generated comment.',
+        parentId: null,
+        createdAt: new Date().toISOString(),
+        replies: [],
+        type: 'gpt',
+        score: 8,
+        good: 'Well-structured response.',
+        bad: 'Could include more examples.',
+        expected: ['Provide examples', 'Explain further'],
+        followup: ['Would you like more details?', 'Do you have any specific questions?'],
+    } as GptCommentType,
+];
 
 export const useComments = ({ topicId, nodeId }: UseCommentsProps) => {
     const queryClient = useQueryClient();
@@ -21,6 +75,7 @@ export const useComments = ({ topicId, nodeId }: UseCommentsProps) => {
         queryFn: () => fetchComments(topicId, nodeId),
         staleTime: 1000 * 60 * 5, // 5 minutes
         refetchOnWindowFocus: false,
+        initialData: initialTestComments,
     });
 
     const addCommentMutation = useMutation<

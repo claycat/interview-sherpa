@@ -1,11 +1,4 @@
-export interface Reply {
-    id: string;
-    author: string;
-    profileURL: string;
-    parentId: string;
-    content: string;
-    createdAt: string;
-}
+export const CommentType = ['user', 'gpt'] as const;
 
 export interface CommentType {
     id: string;
@@ -14,5 +7,14 @@ export interface CommentType {
     content: string;
     parentId?: string | null;
     createdAt: string;
-    replies: Reply[];
+    replies: CommentType[];
+    type?: (typeof CommentType)[number];
+}
+export interface GptCommentType extends CommentType {
+    type: 'gpt';
+    score: number;
+    good: string;
+    bad: string;
+    expected: string[];
+    followup: string[];
 }
