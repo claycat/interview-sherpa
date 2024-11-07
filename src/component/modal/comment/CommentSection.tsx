@@ -20,7 +20,7 @@ interface CommentSectionProps {
 
 const CommentSection: React.FC<CommentSectionProps> = ({ nodeId, comments, addComment }) => {
     const [newComment, setNewComment] = useState<string>('');
-    const [commentsVisible, setCommentsVisible] = useState<boolean>(false);
+    const [commentsVisible, setCommentsVisible] = useState<boolean>(true);
     const userId = authStore.getState().user?.id;
 
     const handleAddComment = async (e: React.FormEvent) => {

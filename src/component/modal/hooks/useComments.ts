@@ -16,8 +16,9 @@ const initialTestComments: CommentType[] = [
     {
         id: '1',
         author: 'Test User',
-        profileURL: 'https://avatar.iran.liara.run/public',
-        content: 'This is a test comment.',
+        profileURL: 'https://ui-avatars.com/api/?background=random',
+        content:
+            'This is a test comment.This is a test comment.This is a test comment.This is a test comment.This is a test comment.This is a test comment.This is a test comment.',
         parentId: null,
         createdAt: new Date().toISOString(),
         replies: [],
@@ -26,7 +27,7 @@ const initialTestComments: CommentType[] = [
     {
         id: '2',
         author: 'Another User',
-        profileURL: 'https://avatar.iran.liara.run/public',
+        profileURL: 'https://ui-avatars.com/api/?background=random',
         content: 'Another test comment.',
         parentId: null,
         createdAt: new Date().toISOString(),
@@ -37,7 +38,7 @@ const initialTestComments: CommentType[] = [
     {
         id: '3',
         author: 'Another User',
-        profileURL: 'https://avatar.iran.liara.run/public',
+        profileURL: 'https://ui-avatars.com/api/?background=random',
         content: 'Another test comment.',
         parentId: '2',
         createdAt: new Date().toISOString(),
@@ -47,7 +48,7 @@ const initialTestComments: CommentType[] = [
     {
         id: '4',
         author: 'GPT AI',
-        profileURL: 'https://avatar.iran.liara.run/public',
+        profileURL: 'https://ui-avatars.com/api/?background=random',
         content: 'This is a test GPT-generated comment.',
         parentId: null,
         createdAt: new Date().toISOString(),
