@@ -7,18 +7,28 @@ import CommentItem from './CommentItem';
 import { CommentType } from './CommentType';
 import { SubmitCommentButtons } from './SubmitCommentButtons';
 import { PostCommentResponseDto } from './commentsApi';
+export interface AddCommentParams {
+    content: string;
+    question: string;
+    memberId: string;
+    parentId?: string | null;
+}
+
+export type AddCommentFunction = (params: AddCommentParams) => Promise<PostCommentResponseDto>;
 
 interface CommentSectionProps {
     nodeId: string;
     comments: CommentType[];
-    addComment: (params: {
-        content: string;
-        memberId: string;
-        parentId?: string | null;
-    }) => Promise<PostCommentResponseDto>;
+    question: string;
+    addComment: AddCommentFunction;
 }
 
-const CommentSection: React.FC<CommentSectionProps> = ({ nodeId, comments, addComment }) => {
+const CommentSection: React.FC<CommentSectionProps> = ({
+    nodeId,
+    comments,
+    addComment,
+    question,
+}) => {
     const [newComment, setNewComment] = useState<string>('');
     const [commentsVisible, setCommentsVisible] = useState<boolean>(true);
     const userId = authStore.getState().user?.id;
@@ -31,7 +41,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({ nodeId, comments, addCo
         }
         if (newComment.trim() === '') return;
         try {
-            await addComment({ content: newComment, memberId: userId });
+            await addComment({ content: newComment, memberId: userId, question });
             setNewComment('');
         } catch (err) {
             console.error('Failed to add comment:', err);
@@ -56,7 +66,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({ nodeId, comments, addCo
             <Collapse in={commentsVisible} timeout="auto" unmountOnExit sx={{ marginTop: '15px' }}>
                 <>
                     {comments.map(comment => (
-                        <CommentItem key={comment.id} comment={comment} addComment={addComment} />
+                        <CommentItem
+                            question={question}
+                            key={comment.id}
+                            comment={comment}
+                            addComment={addComment}
+                        />
                     ))}
                 </>
             </Collapse>

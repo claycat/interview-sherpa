@@ -7,20 +7,18 @@ import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import { Box, Chip } from '@mui/material';
 import React from 'react';
 import ExpandableSection from '../ExpandableSection';
-import { PostCommentResponseDto } from './commentsApi';
-import { GptCommentType } from './CommentType';
+import { AddCommentFunction } from './CommentSection';
+import { AICommentType } from './CommentType';
 import CommonCommentContent from './CommonCommentContent';
 import ListSection from './ListSection';
+
 interface CommentItemProps {
-    comment: GptCommentType;
-    addComment: (params: {
-        content: string;
-        memberId: string;
-        parentId?: string | null;
-    }) => Promise<PostCommentResponseDto>;
+    comment: AICommentType;
+    question: string;
+    addComment: AddCommentFunction;
 }
 
-const GptCommentItem: React.FC<CommentItemProps> = ({ comment, addComment }) => {
+const GptCommentItem: React.FC<CommentItemProps> = ({ comment, addComment, question }) => {
     const collapsedContent = (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
             <Chip label="Score" variant="outlined" size="small" icon={<PollIcon />} />
@@ -61,6 +59,7 @@ const GptCommentItem: React.FC<CommentItemProps> = ({ comment, addComment }) => 
         <CommonCommentContent
             comment={comment}
             addComment={addComment}
+            question={question}
             renderCommentText={() => (
                 <ExpandableSection
                     collapsedContent={collapsedContent}

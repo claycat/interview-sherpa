@@ -65,6 +65,7 @@ const Modal: FC<ModalProps> = ({ show, onClose, data, onUpdate }) => {
                         onUpdate={onUpdate}
                     />
                     <CommentSection
+                        question={question}
                         comments={comments ?? []}
                         addComment={addComment}
                         nodeId={nodeId}

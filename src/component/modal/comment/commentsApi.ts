@@ -53,6 +53,7 @@ export const addComment = async (
     topicId: string,
     nodeId: string,
     content: string,
+    question: string,
     memberId: string,
     parentId: string | null = null,
 ): Promise<PostCommentResponseDto> => {
@@ -62,6 +63,7 @@ export const addComment = async (
             content,
             memberId,
             parentId,
+            question,
             flowId: topicId,
         },
     );

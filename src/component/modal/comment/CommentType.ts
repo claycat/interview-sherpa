@@ -1,4 +1,6 @@
-export const CommentTypes = ['user', 'gpt'] as const;
+export const CommentTypes = ['user', 'ai'] as const;
+
+export const AIProviders = ['gpt-4o-mini', 'gpt3', 'gpt4', 'gpt4o'];
 
 export interface BaseCommentType {
     id: string;
@@ -15,8 +17,9 @@ export interface UserCommentType extends BaseCommentType {
     type: 'user';
 }
 
-export interface GptCommentType extends BaseCommentType {
-    type: 'gpt';
+export interface AICommentType extends BaseCommentType {
+    type: 'ai';
+    provider: (typeof AIProviders)[number];
     score: number;
     good: string;
     bad: string;
@@ -24,4 +27,4 @@ export interface GptCommentType extends BaseCommentType {
     followup: string[];
 }
 
-export type CommentType = UserCommentType | GptCommentType;
+export type CommentType = UserCommentType | AICommentType;

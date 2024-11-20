@@ -5,16 +5,13 @@ import { Button, Comment, Form } from 'semantic-ui-react';
 import { authStore } from 'state/authStore';
 import ExpandableText from '../ExpandableText';
 import CommentItem from './CommentItem';
-import { PostCommentResponseDto } from './commentsApi';
+import { AddCommentFunction } from './CommentSection';
 import { BaseCommentType } from './CommentType';
 
 interface CommonCommentContentProps {
     comment: BaseCommentType;
-    addComment: (params: {
-        content: string;
-        memberId: string;
-        parentId?: string | null;
-    }) => Promise<PostCommentResponseDto>;
+    question: string;
+    addComment: AddCommentFunction;
     children?: React.ReactNode;
     renderCommentText?: () => React.ReactNode;
 }
@@ -24,6 +21,7 @@ const CommonCommentContent: React.FC<CommonCommentContentProps> = ({
     addComment,
     children,
     renderCommentText,
+    question,
 }) => {
     const [replyContent, setReplyContent] = useState<string>('');
     const [replyVisible, setReplyVisible] = useState<boolean>(false);
@@ -42,6 +40,7 @@ const CommonCommentContent: React.FC<CommonCommentContentProps> = ({
                 content: replyContent,
                 memberId: userId,
                 parentId: comment.id,
+                question,
             });
             setReplyContent('');
             setReplyVisible(false);
@@ -103,7 +102,12 @@ const CommonCommentContent: React.FC<CommonCommentContentProps> = ({
                 >
                     <Comment.Group>
                         {comment.replies.map(reply => (
-                            <CommentItem key={reply.id} comment={reply} addComment={addComment} />
+                            <CommentItem
+                                key={reply.id}
+                                comment={reply}
+                                addComment={addComment}
+                                question={question}
+                            />
                         ))}
                     </Comment.Group>
                 </Collapse>

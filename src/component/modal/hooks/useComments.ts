@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { CommentType, GptCommentType } from '../comment/CommentType';
+import { AICommentType, CommentType } from '../comment/CommentType';
 import { PostCommentResponseDto, addComment, fetchComments } from '../comment/commentsApi';
 
 interface UseCommentsProps {
@@ -48,18 +48,19 @@ const initialTestComments: CommentType[] = [
     {
         id: '4',
         author: 'GPT AI',
+        provider: 'gpt-4o-mini',
         profileURL: 'https://ui-avatars.com/api/?background=random',
         content: 'This is a test GPT-generated comment.',
         parentId: null,
         createdAt: new Date().toISOString(),
         replies: [],
-        type: 'gpt',
+        type: 'ai',
         score: 8,
         good: 'Well-structured response.',
         bad: 'Could include more examples.',
         expected: ['Provide examples', 'Explain further'],
         followup: ['Would you like more details?', 'Do you have any specific questions?'],
-    } as GptCommentType,
+    } as AICommentType,
 ];
 
 export const useComments = ({ topicId, nodeId }: UseCommentsProps) => {
@@ -82,10 +83,10 @@ export const useComments = ({ topicId, nodeId }: UseCommentsProps) => {
     const addCommentMutation = useMutation<
         PostCommentResponseDto,
         Error,
-        { content: string; memberId: string; parentId?: string | null }
+        { content: string; memberId: string; parentId?: string | null; question: string }
     >({
-        mutationFn: ({ content, memberId, parentId }) =>
-            addComment(topicId, nodeId, content, memberId, parentId ?? null),
+        mutationFn: ({ content, memberId, parentId, question }) =>
+            addComment(topicId, nodeId, content, question, memberId, parentId ?? null),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['comments', topicId, nodeId] });
         },

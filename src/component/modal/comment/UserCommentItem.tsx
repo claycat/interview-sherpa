@@ -1,21 +1,23 @@
 // UserCommentItem.tsx
 import React from 'react';
+import { AddCommentFunction } from './CommentSection';
 import { UserCommentType } from './CommentType';
 import CommonCommentContent from './CommonCommentContent';
-import { PostCommentResponseDto } from './commentsApi';
 
 interface CommentItemProps {
     comment: UserCommentType;
-    addComment: (params: {
-        content: string;
-        memberId: string;
-        parentId?: string | null;
-    }) => Promise<PostCommentResponseDto>;
+    question: string;
+    addComment: AddCommentFunction;
 }
 
-const UserCommentItem: React.FC<CommentItemProps> = ({ comment, addComment }) => {
-    console.log('?');
-    return <CommonCommentContent comment={comment} addComment={addComment}></CommonCommentContent>;
+const UserCommentItem: React.FC<CommentItemProps> = ({ comment, addComment, question }) => {
+    return (
+        <CommonCommentContent
+            comment={comment}
+            question={question}
+            addComment={addComment}
+        ></CommonCommentContent>
+    );
 };
 
 export default UserCommentItem;
