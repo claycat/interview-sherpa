@@ -76,8 +76,10 @@ const useFlowWebSocket = (brokerURL: string) => {
                 headers: message.headers,
             };
             client.current.publish(payload);
+            return true;
         } else {
             console.warn('Cannot send message, STOMP client is not connected');
+            return false;
         }
     }, []);
 

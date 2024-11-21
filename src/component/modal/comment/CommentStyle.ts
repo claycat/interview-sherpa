@@ -15,3 +15,15 @@ export const StyledAiRequestButton = styled(`div`)({
     fontFamily: 'Lato, Helvetica Neue ,Arial, Helvetica,sans-serif',
     fontWeight: '700',
 });
+
+export const CommentTextSpan = styled(`span`)({
+    fontSize: '0.8rem',
+});
+
+export const CommentTextDiv = styled(`div`)({
+    fontSize: '0.8rem',
+});
+
+export const CommentTextLi = styled(`li`)({
+    fontSize: '0.8rem',
+});

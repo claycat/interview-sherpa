@@ -71,5 +71,5 @@
         "flow-babel-webpack-plugin": "^1.1.1",
         "prettier": "^3.2.5"
     },
-    "proxy": "http://172.17.48.1:8888"
+    "proxy": "http://localhost:8888"
 }

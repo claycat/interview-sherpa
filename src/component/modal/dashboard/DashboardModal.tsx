@@ -4,7 +4,7 @@ import apiClient from 'common/axios/axios';
 import moment from 'moment';
 import { useEffect, useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
-import { FaCrown, FaUserCircle } from 'react-icons/fa';
+import { FaUserCircle } from 'react-icons/fa';
 import { useParams } from 'react-router-dom';
 import { Icon, Input, Menu, MenuItem, Modal, Popup } from 'semantic-ui-react';
 import { useAuthStore } from 'state/authStore';
@@ -21,7 +21,6 @@ import {
     ModalContentWrapper,
     SearchSegment,
     Sidebar,
-    UpgradeButton,
     UserEmail,
     UserSection,
     UserStatus,
@@ -109,7 +108,7 @@ const DashboardModal = ({ open, onClose }: DashboardModalProps) => {
                                     size={50}
                                     style={{ marginBottom: '10px', color: '#777' }}
                                 />
-                                <UserEmail>claycat@gmail.com</UserEmail>
+                                <UserEmail>{user?.email}</UserEmail>
                                 <UserStatus>User</UserStatus>
                             </UserSection>
 
@@ -119,29 +118,32 @@ const DashboardModal = ({ open, onClose }: DashboardModalProps) => {
                                         window.location.href = `/topic`;
                                     }}
                                 >
-                                    <AiOutlinePlus style={{ marginRight: '8px' }} />
+                                    <AiOutlinePlus
+                                        style={{ marginRight: '8px', paddingTop: '3px' }}
+                                    />
                                     New Diagram
                                 </MenuItem>
                                 <MenuItem onClick={() => console.log('My Diagrams clicked')}>
-                                    My Diagrams
+                                    My diagrams
                                 </MenuItem>
-                                <MenuItem onClick={() => console.log('Shared With Me clicked')}>
-                                    Shared With Me
+                                <MenuItem onClick={() => alert('Working on it...')}>
+                                    Shared with me
                                 </MenuItem>
                             </Menu>
                             <ButtonsContainer>
-                                <UpgradeButton color="orange" size="small" fluid>
+                                {/* <UpgradeButton color="orange" size="small" fluid>
                                     <FaCrown style={{ marginRight: '8px' }} />
                                     Buy me a coffee
-                                </UpgradeButton>
+                                </UpgradeButton> */}
                             </ButtonsContainer>
                         </Sidebar>
                         <MainContent>
                             <SearchSegment basic>
                                 <Input
                                     icon="search"
-                                    placeholder="Search diagrams..."
+                                    placeholder="Working on it..."
                                     fluid
+                                    disabled={true}
                                     style={{ backgroundColor: 'transparent', color: '#333' }}
                                 />
                             </SearchSegment>

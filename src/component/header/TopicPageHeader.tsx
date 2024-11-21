@@ -33,8 +33,14 @@ import {
     StyledToolbar,
 } from './TopicPageHeaderStyle';
 
-const TopicPageHeader = ({ sendMessage }: { sendMessage?: SendMessageType }) => {
-    const { isAuthenticated, user, role } = useAuthStore();
+const TopicPageHeader = ({
+    sendMessage,
+    isConnected,
+}: {
+    sendMessage?: SendMessageType;
+    isConnected?: boolean;
+}) => {
+    const { isAuthenticated, user, role, sessionExpired } = useAuthStore();
     const { topic_id } = useParams();
     const [searchParams] = useSearchParams();
     const token = searchParams.get('token');
@@ -83,15 +89,17 @@ const TopicPageHeader = ({ sendMessage }: { sendMessage?: SendMessageType }) => 
                     headers.token = token;
                 }
 
-                sendMessage(`/app/flow/${topic_id}/patch`, {
+                const result = sendMessage(`/app/flow/${topic_id}/patch`, {
                     payload: {
                         flow: flowToJson(rf),
                     },
                     headers,
                 });
                 setLastSuccessTime(moment().format('h:mm:ss A'));
+                if (!result) setLastSuccessTime(null);
             } catch (error) {
                 console.error('Failed to save title:', error);
+                setLastSuccessTime(null);
             }
         }, 5000);
 
@@ -141,7 +149,13 @@ const TopicPageHeader = ({ sendMessage }: { sendMessage?: SendMessageType }) => 
                         >
                             <SaveIcon style={{ fontSize: '20px' }} />
                             {!editable && <span> Save</span>}
-                            {editable && <span>Last Save {lastSuccessTime}</span>}
+                            {editable && (
+                                <span>
+                                    {lastSuccessTime === null
+                                        ? `Not Saved`
+                                        : `Last Save ${lastSuccessTime}`}{' '}
+                                </span>
+                            )}
                         </SaveIconWrapper>
                         <ShareIconWrapper
                             onClick={() => {

@@ -11,6 +11,7 @@ import { AddCommentFunction } from './CommentSection';
 import { AICommentType } from './CommentType';
 import CommonCommentContent from './CommonCommentContent';
 import ListSection from './ListSection';
+import { CommentTextDiv } from './CommentStyle';
 
 interface CommentItemProps {
     comment: AICommentType;
@@ -42,16 +43,16 @@ const GptCommentItem: React.FC<CommentItemProps> = ({ comment, addComment, quest
         >
             <div>
                 <Chip label="Good" variant="outlined" size="small" icon={<ThumbUpOffAltIcon />} />
-                <div style={{ marginTop: '5px' }}>{comment.good}</div>
+                <CommentTextDiv style={{ marginTop: '5px' }}>{comment.goodAspects}</CommentTextDiv>
             </div>
 
             <div>
                 <Chip label="Bad" variant="outlined" size="small" icon={<ThumbDownOffAltIcon />} />
-                <div style={{ marginTop: '5px' }}>{comment.bad}</div>
+                <CommentTextDiv style={{ marginTop: '5px' }}>{comment.badAspects}</CommentTextDiv>
             </div>
             <ListSection label="Expected Keywords" icon={<KeyIcon />} items={comment.expected} />
 
-            <ListSection label="Follow-up" icon={<FollowTheSignsIcon />} items={comment.followup} />
+            <ListSection label="Follow-up" icon={<FollowTheSignsIcon />} items={comment.followUp} />
         </Box>
     );
 

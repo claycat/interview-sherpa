@@ -13,7 +13,6 @@ import { Connection, ConnectionMode, Edge, Node, useReactFlow } from 'reactflow'
 import { authStore, useAuthStore } from 'state/authStore';
 import { titleStore } from 'state/titleStore';
 import { NodeContent } from 'type/NodeContent';
-import { flowToJson } from 'util/flowToJson';
 
 const exampleFlowObject = newExampleFlowObject();
 
@@ -116,7 +115,7 @@ const InitialTopicPage = () => {
                         onUpdate={newData => updateNodeData(currentNode.id, newData)}
                     />
                 )}
-                <button
+                {/* <button
                     onClick={() => {
                         console.log(rf.toObject());
                         console.log(JSON.stringify(rf.toObject()));
@@ -130,7 +129,7 @@ const InitialTopicPage = () => {
                     style={{ position: 'absolute', top: 90, right: 10 }}
                 >
                     Print
-                </button>
+                </button> */}
             </div>
         </>
     );

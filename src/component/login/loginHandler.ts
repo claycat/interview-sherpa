@@ -39,8 +39,7 @@ export const handleOAuthGoogle: HandleOAuthGoogle = (onClose, reactFlow) => {
         }
 
         if (event.data === 'oauth_success') {
-            await authStore.getState().fetchSession();
-            const user = authStore.getState().user;
+            const { user } = await authStore.getState().fetchSession();
             const title = titleStore.getState().title;
 
             const flowId = getFlowIdFromPath();
@@ -49,11 +48,11 @@ export const handleOAuthGoogle: HandleOAuthGoogle = (onClose, reactFlow) => {
             try {
                 if (flowId) {
                     // user logged in but session was expired, so update flow based on current status
-                    await apiClient.patch(`/flows/${flowId}`, {
-                        memberId: user?.id,
-                        flowContent: flowToJson(reactFlow),
-                        title,
-                    });
+                    // await apiClient.patch(`/flows/${flowId}`, {
+                    //     memberId: user?.id,
+                    //     flowContent: flowToJson(reactFlow),
+                    //     title,
+                    // });
                     redirectPath = `/topic/${flowId}`;
                 } else {
                     const response = await apiClient.post('/flows', {

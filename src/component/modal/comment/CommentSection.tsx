@@ -12,6 +12,7 @@ export interface AddCommentParams {
     question: string;
     memberId: string;
     parentId?: string | null;
+    requestAIEvaluation: boolean;
 }
 
 export type AddCommentFunction = (params: AddCommentParams) => Promise<PostCommentResponseDto>;
@@ -33,7 +34,7 @@ const CommentSection: React.FC<CommentSectionProps> = ({
     const [commentsVisible, setCommentsVisible] = useState<boolean>(true);
     const userId = authStore.getState().user?.id;
 
-    const handleAddComment = async (e: React.FormEvent) => {
+    const handleAddComment = async (e: React.FormEvent, requestAIEvaluation: boolean) => {
         e.preventDefault();
         if (!userId) {
             alert('Please login to add a comment');
@@ -41,7 +42,12 @@ const CommentSection: React.FC<CommentSectionProps> = ({
         }
         if (newComment.trim() === '') return;
         try {
-            await addComment({ content: newComment, memberId: userId, question });
+            await addComment({
+                content: newComment,
+                memberId: userId,
+                question,
+                requestAIEvaluation,
+            });
             setNewComment('');
         } catch (err) {
             console.error('Failed to add comment:', err);
@@ -59,9 +65,11 @@ const CommentSection: React.FC<CommentSectionProps> = ({
                 Comments
             </Header>
 
-            <Checkbox onClick={toggleCommentsVisibility} toggle label="Toggle Visibility">
-                {commentsVisible ? 'Hide Comments' : 'Show Comments'}
-            </Checkbox>
+            <Checkbox
+                onClick={toggleCommentsVisibility}
+                toggle
+                label={commentsVisible ? 'Hide Comments' : 'Show Comments'}
+            />
 
             <Collapse in={commentsVisible} timeout="auto" unmountOnExit sx={{ marginTop: '15px' }}>
                 <>

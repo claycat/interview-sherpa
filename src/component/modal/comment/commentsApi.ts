@@ -56,6 +56,7 @@ export const addComment = async (
     question: string,
     memberId: string,
     parentId: string | null = null,
+    requestAIEvaluation: boolean,
 ): Promise<PostCommentResponseDto> => {
     const response = await apiClient.post<ApiResponse<PostCommentResponseDto>>(
         `/flows/${topicId}/nodes/${nodeId}/comments`,
@@ -65,6 +66,7 @@ export const addComment = async (
             parentId,
             question,
             flowId: topicId,
+            requestAIEvaluation,
         },
     );
 

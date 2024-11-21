@@ -41,6 +41,7 @@ const CommonCommentContent: React.FC<CommonCommentContentProps> = ({
                 memberId: userId,
                 parentId: comment.id,
                 question,
+                requestAIEvaluation: false,
             });
             setReplyContent('');
             setReplyVisible(false);

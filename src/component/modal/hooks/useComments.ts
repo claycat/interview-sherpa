@@ -22,7 +22,7 @@ const initialTestComments: CommentType[] = [
         parentId: null,
         createdAt: new Date().toISOString(),
         replies: [],
-        type: 'user',
+        type: 'USER',
     },
     {
         id: '2',
@@ -32,7 +32,7 @@ const initialTestComments: CommentType[] = [
         parentId: null,
         createdAt: new Date().toISOString(),
         replies: [],
-        type: 'user',
+        type: 'USER',
     },
 
     {
@@ -43,7 +43,7 @@ const initialTestComments: CommentType[] = [
         parentId: '2',
         createdAt: new Date().toISOString(),
         replies: [],
-        type: 'user',
+        type: 'USER',
     },
     {
         id: '4',
@@ -54,12 +54,12 @@ const initialTestComments: CommentType[] = [
         parentId: null,
         createdAt: new Date().toISOString(),
         replies: [],
-        type: 'ai',
+        type: 'AI',
         score: 8,
-        good: 'Well-structured response.',
-        bad: 'Could include more examples.',
+        goodAspects: 'Well-structured response.',
+        badAspects: 'Could include more examples.',
         expected: ['Provide examples', 'Explain further'],
-        followup: ['Would you like more details?', 'Do you have any specific questions?'],
+        followUp: ['Would you like more details?', 'Do you have any specific questions?'],
     } as AICommentType,
 ];
 
@@ -77,16 +77,29 @@ export const useComments = ({ topicId, nodeId }: UseCommentsProps) => {
         queryFn: () => fetchComments(topicId, nodeId),
         staleTime: 1000 * 60 * 5, // 5 minutes
         refetchOnWindowFocus: false,
-        initialData: initialTestComments,
     });
 
     const addCommentMutation = useMutation<
         PostCommentResponseDto,
         Error,
-        { content: string; memberId: string; parentId?: string | null; question: string }
+        {
+            content: string;
+            memberId: string;
+            parentId?: string | null;
+            question: string;
+            requestAIEvaluation: boolean;
+        }
     >({
-        mutationFn: ({ content, memberId, parentId, question }) =>
-            addComment(topicId, nodeId, content, question, memberId, parentId ?? null),
+        mutationFn: ({ content, memberId, parentId, question, requestAIEvaluation }) =>
+            addComment(
+                topicId,
+                nodeId,
+                content,
+                question,
+                memberId,
+                parentId ?? null,
+                requestAIEvaluation,
+            ),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['comments', topicId, nodeId] });
         },

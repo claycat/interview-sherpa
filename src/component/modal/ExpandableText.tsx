@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { CommentTextSpan } from './comment/CommentStyle';
 
 interface ExpandableTextProps {
     text: string;
@@ -9,7 +10,7 @@ const ExpandableText: React.FC<ExpandableTextProps> = ({ text, maxLength }) => {
     const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     if (text.length <= maxLength) {
-        return <span>{text}</span>;
+        return <CommentTextSpan>{text}</CommentTextSpan>;
     }
 
     return (

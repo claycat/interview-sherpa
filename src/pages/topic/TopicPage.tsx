@@ -16,7 +16,6 @@ import { ConnectionMode, useReactFlow } from 'reactflow';
 
 import 'reactflow/dist/style.css';
 import { authStore } from 'state/authStore';
-import { flowToJson } from 'util/flowToJson';
 
 const nodeTypes = {
     customNode: CustomNode,
@@ -120,13 +119,13 @@ const TopicPage = () => {
                         onUpdate={newData => updateNodeData(currentNode.id, newData)}
                     />
                 )}
-                <button
+                {/* <button
                     onClick={() => console.log(JSON.stringify(flowToJson(rf)))}
                     disabled={!isConnected}
                     style={{ position: 'absolute', top: 90, right: 10 }}
                 >
                     Print
-                </button>
+                </button> */}
                 {/* <button
                     onClick={handleSave}
                     disabled={!isConnected}
