@@ -1,5 +1,3 @@
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import SaveIcon from '@mui/icons-material/Save';
 import ShareIcon from '@mui/icons-material/Share';
 import { useEffect, useState } from 'react';
@@ -24,7 +22,6 @@ import { RoleIconComponent } from './role/RoleIconComponent';
 import {
     HeaderTitleInput,
     HeaderTitleSection,
-    InquiryIconWrapper,
     LeftSection,
     RightSection,
     SaveIconWrapper,
@@ -32,6 +29,7 @@ import {
     StyledAppBar,
     StyledToolbar,
 } from './TopicPageHeaderStyle';
+import { InformationDropdown } from './dropdown/InformationDropdown';
 
 const TopicPageHeader = ({
     sendMessage,
@@ -170,14 +168,7 @@ const TopicPageHeader = ({
                         <RoleIconComponent />
                     </LeftSection>
                     <RightSection>
-                        <InquiryIconWrapper
-                            onClick={() => {
-                                alert('working on it...');
-                            }}
-                        >
-                            <QuestionMarkIcon style={{ fontSize: '20px' }} />
-                            <KeyboardArrowDownIcon style={{ width: '20px' }} />
-                        </InquiryIconWrapper>
+                        <InformationDropdown />
                         <ProfileDropdown />
                     </RightSection>
                 </StyledToolbar>

@@ -7,9 +7,7 @@ const GoogleRedirectPage = () => {
 
     const handleOAuthGoogle = async (code: string) => {
         try {
-            console.log('CODE: ' + code);
-
-            window.location.href = `http://localhost:8888/oauth/login/google?code=${code}`;
+            window.location.href = `${process.env.REACT_APP_API_URL}/oauth/login/google?code=${code}`;
 
             navigate('/success');
         } catch (error) {

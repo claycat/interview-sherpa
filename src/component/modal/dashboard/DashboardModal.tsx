@@ -59,9 +59,7 @@ const DashboardModal = ({ open, onClose }: DashboardModalProps) => {
     const confirmDelete = async () => {
         if (diagramToDelete) {
             try {
-                console.log(`Deleting diagram with id: ${diagramToDelete}`);
                 await apiClient.delete(`/flows/${diagramToDelete}`);
-                // Example: await apiClient.delete(`/flows/${diagramToDelete}`);
                 setFlowSummary(prev => prev.filter(diagram => diagram.id !== diagramToDelete));
             } catch (error) {
                 console.error('Failed to delete diagram', error);
@@ -75,7 +73,6 @@ const DashboardModal = ({ open, onClose }: DashboardModalProps) => {
     const fetchDiagrams = async () => {
         try {
             const response = await apiClient.get(`/members/${user?.id}/flows`);
-            console.log(response.data.data.flows);
             setFlowSummary(response.data.data.flows);
         } catch (error) {
             console.error('Failed to fetch diagrams', error);
@@ -126,7 +123,7 @@ const DashboardModal = ({ open, onClose }: DashboardModalProps) => {
                                 <MenuItem onClick={() => console.log('My Diagrams clicked')}>
                                     My diagrams
                                 </MenuItem>
-                                <MenuItem onClick={() => alert('Working on it...')}>
+                                <MenuItem disabled onClick={() => alert('Working on it...')}>
                                     Shared with me
                                 </MenuItem>
                             </Menu>

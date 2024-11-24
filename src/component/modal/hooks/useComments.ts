@@ -5,11 +5,7 @@ import { PostCommentResponseDto, addComment, fetchComments } from '../comment/co
 interface UseCommentsProps {
     topicId: string;
     nodeId: string;
-}
-
-interface UseCommentsProps {
-    topicId: string;
-    nodeId: string;
+    token?: string;
 }
 
 const initialTestComments: CommentType[] = [
@@ -63,7 +59,7 @@ const initialTestComments: CommentType[] = [
     } as AICommentType,
 ];
 
-export const useComments = ({ topicId, nodeId }: UseCommentsProps) => {
+export const useComments = ({ topicId, nodeId, token }: UseCommentsProps) => {
     const queryClient = useQueryClient();
 
     const {
@@ -74,7 +70,7 @@ export const useComments = ({ topicId, nodeId }: UseCommentsProps) => {
         refetch,
     } = useQuery<CommentType[], Error>({
         queryKey: ['comments', topicId, nodeId],
-        queryFn: () => fetchComments(topicId, nodeId),
+        queryFn: () => fetchComments(topicId, nodeId, token),
         staleTime: 1000 * 60 * 5, // 5 minutes
         refetchOnWindowFocus: false,
     });
@@ -99,6 +95,7 @@ export const useComments = ({ topicId, nodeId }: UseCommentsProps) => {
                 memberId,
                 parentId ?? null,
                 requestAIEvaluation,
+                token,
             ),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['comments', topicId, nodeId] });

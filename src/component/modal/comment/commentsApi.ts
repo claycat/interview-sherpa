@@ -16,13 +16,20 @@ export interface PostCommentResponseDto {
     content: string;
     createdAt: string;
 }
-export const fetchComments = async (topicId: string, nodeId: string): Promise<CommentType[]> => {
-    const response = await apiClient.get<ApiResponse<GetCommentsResponseDto>>(
-        `/flows/${topicId}/nodes/${nodeId}/comments`,
-    );
+
+export const fetchComments = async (
+    topicId: string,
+    nodeId: string,
+    token?: string,
+): Promise<CommentType[]> => {
+    const requestUrl =
+        token === undefined
+            ? `/flows/${topicId}/nodes/${nodeId}/comments`
+            : `/flows/${topicId}/nodes/${nodeId}/comments?token=${token}`;
+
+    const response = await apiClient.get<ApiResponse<GetCommentsResponseDto>>(requestUrl);
 
     const comments = response.data.data.comments;
-    console.log(comments);
     const commentMap: { [key: string]: CommentType } = {};
 
     comments.forEach(comment => {
@@ -57,6 +64,7 @@ export const addComment = async (
     memberId: string,
     parentId: string | null = null,
     requestAIEvaluation: boolean,
+    token?: string,
 ): Promise<PostCommentResponseDto> => {
     const response = await apiClient.post<ApiResponse<PostCommentResponseDto>>(
         `/flows/${topicId}/nodes/${nodeId}/comments`,
@@ -67,6 +75,11 @@ export const addComment = async (
             question,
             flowId: topicId,
             requestAIEvaluation,
+        },
+        {
+            headers: {
+                'flow-token': token,
+            },
         },
     );
 

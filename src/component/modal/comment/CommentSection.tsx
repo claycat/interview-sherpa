@@ -68,7 +68,8 @@ const CommentSection: React.FC<CommentSectionProps> = ({
             <Checkbox
                 onClick={toggleCommentsVisibility}
                 toggle
-                label={commentsVisible ? 'Hide Comments' : 'Show Comments'}
+                defaultChecked
+                label={commentsVisible ? 'Comments Visible' : 'Comments Hidden'}
             />
 
             <Collapse in={commentsVisible} timeout="auto" unmountOnExit sx={{ marginTop: '15px' }}>

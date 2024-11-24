@@ -118,3 +118,10 @@ export const ProfileImage = styled('img')({
 export const StatusText = styled('div')(({ isAuthenticated }: { isAuthenticated: boolean }) => ({
     color: isAuthenticated ? 'green' : 'red',
 }));
+
+export const CenteredDropdownContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+`;

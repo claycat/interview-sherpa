@@ -27,11 +27,9 @@ export const DashboardDropdown = () => {
     const { isAuthenticated } = useAuthStore();
 
     const handleOpenModal = () => {
-        console.log('open');
         setIsModalOpen(true);
     };
 
-    // Function to close the modal
     const handleCloseModal = () => {
         setIsModalOpen(false);
     };

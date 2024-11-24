@@ -17,7 +17,6 @@ const useFlowWebSocket = (brokerURL: string) => {
             brokerURL,
             reconnectDelay: 5000,
             onConnect: () => {
-                console.log('STOMP connected');
                 setIsConnected(true);
                 subscriptions.current.forEach(sub => {
                     client.current?.subscribe(sub.topic, (message: IMessage) => {
@@ -26,7 +25,6 @@ const useFlowWebSocket = (brokerURL: string) => {
                 });
             },
             onDisconnect: () => {
-                console.log('STOMP disconnected');
                 setIsConnected(false);
             },
             onStompError: frame => {

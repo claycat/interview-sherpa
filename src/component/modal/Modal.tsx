@@ -24,10 +24,12 @@ const Modal: FC<ModalProps> = ({ show, onClose, data, onUpdate }) => {
     const [label, setLabel] = useState(nodeData.label);
     const [question, setQuestion] = useState(nodeData.question);
     const [answers, setAnswers] = useState<string[]>(nodeData.answers);
+    const token = new URLSearchParams(window.location.search).get('token');
 
     const { comments, isLoading, isError, error, addComment, addCommentStatus } = useComments({
         topicId: topic_id as string,
         nodeId,
+        token: token === null ? undefined : token,
     });
 
     useEffect(() => {

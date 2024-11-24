@@ -2,19 +2,16 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import { Dropdown, DropdownDivider, DropdownItem, DropdownMenu } from 'semantic-ui-react';
 import { useAuthStore } from 'state/authStore';
 
-import styled from '@emotion/styled';
 import LoginIcon from '@mui/icons-material/Login';
 import SaveModal from 'component/modal/SaveModal';
 import { useState } from 'react';
-import { ProfileImage, SignInIconWrapper } from '../TopicPageHeaderStyle';
+import {
+    CenteredDropdownContainer,
+    ProfileImage,
+    SignInIconWrapper,
+} from '../TopicPageHeaderStyle';
 
 const defaultProfilePictureUrl = 'https://example.com/default-profile-picture.jpg';
-const CenteredDropdownContainer = styled.div`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-`;
 
 export const ProfileDropdown = () => {
     const { isAuthenticated, user } = useAuthStore();

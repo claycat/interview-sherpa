@@ -41,7 +41,7 @@ function App() {
             <Route
                 path="/topic/:topic_id"
                 element={
-                    <WebSocketProvider brokerURL="ws://localhost:8888/api/ws">
+                    <WebSocketProvider brokerURL={`${process.env.REACT_APP_WEBSOCKET_URL}/api/ws`}>
                         <ReactFlowProvider>
                             <TopicPage />
                         </ReactFlowProvider>

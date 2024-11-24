@@ -1,11 +1,9 @@
 import axios from 'axios';
 import { useAuthStore } from 'state/authStore';
 
-const apiClient = axios.create({
-    baseURL: '/api',
-    timeout: 10000,
-    withCredentials: true,
-});
+const baseURL = process.env.REACT_APP_API_BASE_URL || '/api';
+
+const apiClient = axios.create({ baseURL, timeout: 10000, withCredentials: true });
 
 apiClient.interceptors.response.use(
     response => response,
@@ -14,7 +12,7 @@ apiClient.interceptors.response.use(
             const { setAuth } = useAuthStore.getState();
             setAuth(false, null);
 
-            console.log('unauthorized');
+            console.error('unauthorized');
         }
         return Promise.reject(error);
     },

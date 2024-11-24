@@ -41,7 +41,7 @@ export const handleOAuthGoogle: HandleOAuthGoogle = (onClose, reactFlow) => {
         if (event.data === 'oauth_success') {
             const { user } = await authStore.getState().fetchSession();
             const title = titleStore.getState().title;
-
+            const token = new URLSearchParams(window.location.search).get('token');
             const flowId = getFlowIdFromPath();
             let redirectPath = '/topic';
 
@@ -62,6 +62,10 @@ export const handleOAuthGoogle: HandleOAuthGoogle = (onClose, reactFlow) => {
                     });
                     const flowId = response.data.data.flowId;
                     redirectPath = `/topic/${flowId}`;
+                }
+
+                if (token !== null) {
+                    redirectPath += `?token=${token}`;
                 }
                 window.location.href = redirectPath;
             } catch (e: any) {
