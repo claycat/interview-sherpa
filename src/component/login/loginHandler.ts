@@ -20,10 +20,10 @@ export const handleOAuthGoogle: HandleOAuthGoogle = (onClose, reactFlow) => {
     const left = window.screen.width / 2 - popupWidth / 2;
     const top = window.screen.height / 2 - popupHeight / 2;
 
-    const apiURL = process.env.REACT_APP_API_URL;
+    const apiURL = process.env.REACT_APP_API_BASE_URL;
 
     const oauthWindow = window.open(
-        `${apiURL}/api/oauth2/authorization/google`,
+        `${apiURL}/oauth2/authorization/google`,
         'GoogleOAuth',
         `width=${popupWidth},height=${popupHeight},top=${top},left=${left}`,
     );

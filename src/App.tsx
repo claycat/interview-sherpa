@@ -1,7 +1,6 @@
 import OAuthCallback from 'component/login/OAuthCallback';
 import { WebSocketProvider } from 'hook/websocket/WebSocketContext';
 import MainPage from 'pages/main/MainPage';
-import GoogleRedirectPage from 'pages/redirect/oauth/GoogleRedirectPage';
 import InitialTopicPage from 'pages/topic/InitialTopicPage';
 import TopicPage from 'pages/topic/TopicPage';
 import WelcomePage from 'pages/welcome/WelcomePage';
@@ -41,7 +40,7 @@ function App() {
             <Route
                 path="/topic/:topic_id"
                 element={
-                    <WebSocketProvider brokerURL={`${process.env.REACT_APP_WEBSOCKET_URL}/api/ws`}>
+                    <WebSocketProvider brokerURL={`${process.env.REACT_APP_WEBSOCKET_URL}`}>
                         <ReactFlowProvider>
                             <TopicPage />
                         </ReactFlowProvider>
@@ -49,7 +48,6 @@ function App() {
                 }
             />
             ;
-            <Route path="/oauth/redirected/google" element={<GoogleRedirectPage />} />;
             <Route path="/main" element={<MainPage />} />;
         </Routes>
     );
